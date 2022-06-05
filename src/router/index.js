@@ -17,7 +17,7 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/Profile.vue"),
   },
   {
-    path: "/generator-view",
+    path: "/generator-view/:name",
     name: "generator-view",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/GeneratorView.vue"),
