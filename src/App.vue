@@ -1,10 +1,13 @@
+º
 <template>
   <v-app>
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant.sync="mini"
       permanent
+      floating
       app
+      color="blue-grey lighten-4"
     >
       <v-list-item class="px-2">
         <v-list-item-avatar>
@@ -21,7 +24,12 @@
       <v-divider></v-divider>
 
       <v-list dense>
-        <v-list-item v-for="item in items" :key="item.title" link>
+        <v-list-item
+          v-for="item in items"
+          :key="item.title"
+          link
+          :to="item.route"
+        >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -47,8 +55,8 @@ export default {
     return {
       drawer: true,
       items: [
-        { title: "Generators", icon: "mdi-table-cog" },
-        { title: "Preferences", icon: "mdi-account" },
+        { title: "Generators", icon: "mdi-table-cog", route: "generator-view" },
+        { title: "Preferences", icon: "mdi-account", route: "profile" },
       ],
       mini: true,
     };

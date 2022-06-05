@@ -28,13 +28,13 @@ export default {
   data: () => ({}),
   mounted() {
     // handle reply from the backend
-    window.ipc.on("READ_FILE", (payload) => {
+    window.ipc.on("USER_DATA", (payload) => {
       console.log(payload.content);
     });
   },
   methods: {
     setDefaultPath() {
-      window.ipc.send("READ_FILE", "chus");
+      window.ipc.send("USER_DATA", "chus");
     },
   },
 };

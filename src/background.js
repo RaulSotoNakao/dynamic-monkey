@@ -1,17 +1,90 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, ipcMain } from "electron";
+import {
+  app,
+  protocol,
+  BrowserWindow,
+  ipcMain,
+  dialog,
+  clipboard,
+} from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+import {
+  createDir,
+  getFilesNamesOfDirectory,
+  readFile,
+} from "./utils/fileSystemService";
+
+import { getAllGeneratorData, addNewGenerator, updateGenerator, deleteGenerator } from "./utils/generatorService";
 const isDevelopment = process.env.NODE_ENV !== "production";
 const Store = require("electron-store");
 import path from "path";
 const store = new Store();
 
-store.set("unicorn", "uniq");
+ipcMain.on("SELECT_DIRECTORY", (event) => {
+  dialog
+    .showOpenDialog({
+      properties: ["openDirectory"],
+    })
+    .then((result) => {
+      if (!result.canceled) {
+        event.reply("SELECT_DIRECTORY", { selected_dir: result.filePaths[0] });
+      }
+    });
+});
 
 ipcMain.on("READ_FILE", (event, payload) => {
+  const formats = clipboard.availableFormats();
+  console.log(formats);
+
   event.reply("READ_FILE", { content: store.get("unicorn") });
+});
+
+ipcMain.on("SAVE_USER_DATA", (event, payload) => {
+  store.set("USER_DATA", { ...payload });
+  event.reply("USER_DATA", { content: store.get("USER_DATA") });
+});
+ipcMain.on("USER_DATA", (event) => {
+  const userData = store.get("USER_DATA");
+  event.reply("USER_DATA", { content: { userData } });
+});
+
+// GENERATOR CRUD
+
+ipcMain.on("ADD_GENERATOR", (event, payload) => {
+  const userData = store.get("USER_DATA");
+  addNewGenerator(userData.urlDirectorioDeTrabajo, payload)
+    .then(() => getAllGeneratorData(userData.urlDirectorioDeTrabajo))
+    .then((generatorList) =>
+      event.reply("GENERATOR_LIST", { content: generatorList })
+    );
+});
+
+ipcMain.on("UPDATE_GENERATOR", (event, payload) => {
+  const userData = store.get("USER_DATA");
+  updateGenerator(userData.urlDirectorioDeTrabajo, payload)
+    .then(() => getAllGeneratorData(userData.urlDirectorioDeTrabajo))
+    .then((generatorList) =>
+      event.reply("GENERATOR_LIST", { content: generatorList })
+    );
+});
+
+ipcMain.on("DELETE_GENERATOR", (event, payload) => {
+  const userData = store.get("USER_DATA");
+  deleteGenerator(userData.urlDirectorioDeTrabajo, payload)
+    .then(() => getAllGeneratorData(userData.urlDirectorioDeTrabajo))
+    .then((generatorList) =>
+      event.reply("GENERATOR_LIST", { content: generatorList })
+    );
+});
+
+
+ipcMain.on("GENERATOR_LIST", (event, payload) => {
+  const userData = store.get("USER_DATA");
+  getAllGeneratorData(userData.urlDirectorioDeTrabajo).then((generatorList) => {
+    event.reply("GENERATOR_LIST", { content: generatorList });
+  });
 });
 
 // Scheme must be registered before the app is ready
@@ -22,8 +95,8 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 700,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
