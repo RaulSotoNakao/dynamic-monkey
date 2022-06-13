@@ -29,6 +29,25 @@ const getAllGeneratorData = (urlDirectorioDeTrabajo) => {
     .then((dirData) => dirData);
 };
 
+const getGeneratorByName = (urlDirectorioDeTrabajo, name) =>
+  getAllGeneratorData(urlDirectorioDeTrabajo)
+    .then((generatorList) =>
+      // get generatorByName
+      generatorList.map((g) => g.definition).find((s) => s.name === name)
+    )
+    .then((selectedGenerator) => {
+      if (selectedGenerator) {
+        const generatorStore = new Store({
+          name: "definition",
+          cwd: path.join(urlDirectorioDeTrabajo, selectedGenerator.name),
+        });
+        return generatorStore.get("definition");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
 const updateGenerator = (urlDirectorioDeTrabajo, generator) =>
   getAllGeneratorData(urlDirectorioDeTrabajo)
     .then((generatorList) =>
@@ -87,5 +106,6 @@ export {
   getAllGeneratorData,
   addNewGenerator,
   updateGenerator,
+  getGeneratorByName,
   deleteGenerator,
 };

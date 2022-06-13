@@ -10,13 +10,14 @@ import {
 } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
-import {
-  createDir,
-  getFilesNamesOfDirectory,
-  readFile,
-} from "./utils/fileSystemService";
 
-import { getAllGeneratorData, addNewGenerator, updateGenerator, deleteGenerator } from "./utils/generatorService";
+import {
+  getAllGeneratorData,
+  addNewGenerator,
+  updateGenerator,
+  deleteGenerator,
+  getGeneratorByName,
+} from "./utils/generatorService";
 const isDevelopment = process.env.NODE_ENV !== "production";
 const Store = require("electron-store");
 import path from "path";
@@ -79,6 +80,13 @@ ipcMain.on("DELETE_GENERATOR", (event, payload) => {
     );
 });
 
+ipcMain.on("GET_GENERATOR", (event, payload) => {
+  const userData = store.get("USER_DATA");
+  getGeneratorByName(userData.urlDirectorioDeTrabajo, payload).then(
+    (selectedGenerator) =>
+      event.reply("GET_GENERATOR", { content: selectedGenerator })
+  );
+});
 
 ipcMain.on("GENERATOR_LIST", (event, payload) => {
   const userData = store.get("USER_DATA");

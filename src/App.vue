@@ -12,16 +12,14 @@
     >
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img src="@/assets/monkey.png" contain></v-img>
+          <v-icon color="primary" >mdi-dog</v-icon>
+          <!-- <v-img src="@/assets/monkey.png" contain></v-img> -->
         </v-list-item-avatar>
 
         <v-list-item-title
           >Bienvenido {{ userData.userName || "" }}!</v-list-item-title
         >
 
-        <v-btn icon @click.stop="mini = !mini">
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
       </v-list-item>
 
       <v-divider></v-divider>
@@ -32,6 +30,7 @@
           :key="item.name"
           link
           :to="item.route"
+          color="primary"
         >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>

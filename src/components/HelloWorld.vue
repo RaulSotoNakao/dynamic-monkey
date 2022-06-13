@@ -9,7 +9,6 @@
 
       <v-col class="mb-5" cols="12">
         <v-row justify="center">
-          <v-btn elevation="2" @click="setDefaultPath()">setDefaultPath</v-btn>
         </v-row>
       </v-col>
     </v-row>
@@ -28,14 +27,7 @@ export default {
   data: () => ({}),
   mounted() {
     // handle reply from the backend
-    window.ipc.on("USER_DATA", (payload) => {
-      console.log(payload.content);
-    });
   },
-  methods: {
-    setDefaultPath() {
-      window.ipc.send("USER_DATA", "chus");
-    },
-  },
+  methods: {},
 };
 </script>
