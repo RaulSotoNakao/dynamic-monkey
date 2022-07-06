@@ -133,7 +133,8 @@ export default {
           itemToAdd.children = [];
         } else {
           itemToAdd.file = this.newItemType;
-          itemToAdd.template = "";
+          itemToAdd.template = `Hello {{name}}\n\rYou have just won {{value}} dollars!\{{#in_ca}}\n\rWell, {{taxed_value}} dollars, after taxes.\n\r{{/in_ca}}
+`;
         }
         this.$emit("addNewItem", { id: item.id, itemToAdd });
 

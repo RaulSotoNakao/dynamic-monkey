@@ -44,7 +44,7 @@ ipcMain.on("READ_FILE", (event, payload) => {
 
 ipcMain.on("SAVE_USER_DATA", (event, payload) => {
   store.set("USER_DATA", { ...payload });
-  event.reply("USER_DATA", { content: store.get("USER_DATA") });
+  event.reply("SAVE_USER_DATA", { content: store.get("USER_DATA") });
 });
 ipcMain.on("USER_DATA", (event) => {
   const userData = store.get("USER_DATA");

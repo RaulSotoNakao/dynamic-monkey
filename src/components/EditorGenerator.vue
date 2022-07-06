@@ -2,22 +2,31 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <v-chip-group active-class="primary--text" column>
-          <v-chip
-            v-for="(value, key) in templateDefinitions"
-            :key="key"
-            @click="newItemType = name"
-          >
-            <v-btn icon color="primary"> {{ key }} </v-btn>
-          </v-chip>
-        </v-chip-group>
+        <v-banner
+          color="accent"
+          elevation="12"
+          icon="mdi-database"
+          rounded
+          single-line
+        >
+          {{
+            selectedLabel +
+            " -> " +
+            JSON.stringify(this.selectedData[selectedLabel])
+          }}
+        </v-banner>
+      </v-col>
+      <v-col cols="12">
+        <v-btn  color="primary">
+          <v-icon dark> mdi-file-replace-outline  </v-icon> Remplazar texto seleccionado o posicion del cursor
+        </v-btn>
       </v-col>
       <v-col cols="12">
         <v-text-field
           append-outer-icon="mdi-find-replace"
-          label="Buscar y remplazar!"
+          :label="`Buscar  y remplazar por el dato ${selectedLabel}!`"
           type="text"
-          @click:append-outer="addNewDataList()"
+          @click:append-outer="findAndReplace()"
           :color="'primary'"
         ></v-text-field>
       </v-col>
@@ -36,7 +45,7 @@
       @select="handleEditor"
       @mouseup="handlerMouseDown"
     >
-      {{ this.value }}
+      {{ this.template }}
     </v-sheet>
     <v-btn color="primary" class="mx-2" @click="() => saveTemplate()">
       Guardar template
@@ -48,11 +57,23 @@
 <script>
 export default {
   props: {
-    value: { type: String, required: true },
-    templateDefinitions: { type: Object, required: true },
+    updater: { type: Number, required: true },
+    selectedFile: { type: Object, required: true },
+    selectedData: { type: Object, default: () => ({}) },
   },
-  computed: {},
+  data: () => ({
+    template: "",
+  }),
+  computed: {
+    selectedLabel() {
+      const keys = this.selectedData ? Object.keys(this.selectedData) : [];
+      return keys.length ? `${keys[0]}` : "";
+    },
+  },
   methods: {
+    findAndReplace() {
+      this.template;
+    },
     saveTemplate() {
       const dataList = document.getElementById("my-code-editor");
       const TEXT_NODE = 3;
@@ -111,13 +132,24 @@ export default {
     handleEditor(ev) {
       console.log(ev);
     },
+    onNewTemplate(tem) {
+      this.template = tem;
+    },
+  },
+  mounted() {
+    this.onNewTemplate(this.selectedFile.template);
+  },
+  watch: {
+    updater() {
+      this.onNewTemplate(this.selectedFile.template);
+    },
   },
 };
 </script>
 
-<style>
+<style scoped>
 ::selection {
-  background-color: transparent;
+  background-color: aliceblue;
   color: #000;
 }
 </style>

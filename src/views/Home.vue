@@ -1,17 +1,21 @@
 <template>
-  <div class="home">
-    <HelloWorld msg="Welcome to Generator app"/>
+  <div class="home black d-flex justify-center align-center">
+    <galaxy></galaxy>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import Galaxy from "../components/ui/Galaxy.vue";
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    HelloWorld
-  }
-}
+    galaxy: Galaxy,
+  },
+};
 </script>
+<style scoped>
+.home {
+  height: 100%;
+  width: 100%;
+}
+</style>

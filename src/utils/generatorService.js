@@ -26,7 +26,11 @@ const getAllGeneratorData = (urlDirectorioDeTrabajo) => {
         )
       )
     )
-    .then((dirData) => dirData);
+    .then((dirData) => dirData)
+    .catch((err) => {
+      console.log(err);
+      return []
+    });
 };
 
 const getGeneratorByName = (urlDirectorioDeTrabajo, name) =>

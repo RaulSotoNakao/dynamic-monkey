@@ -39,44 +39,19 @@
                 <v-card>
                   <v-card-title>¡A crear nuevos datos!</v-card-title>
                   <v-list-item-content>
-                    <v-row class="mx-2">
-                      <v-col cols="12">
-                        <v-chip-group active-class="primary--text" column>
-                          <v-chip>
-                            <v-row>
-                              <v-col>
-                                <v-text-field
-                                  :label="'Crear nuevo objeto'"
-                                  v-model="newObjectData.key"
-                                  type="text"
-                                  :color="'primary'"
-                                ></v-text-field>
-                              </v-col>
-                            </v-row>
-                          </v-chip>
-
-                          <v-chip>
-                            <v-row>
-                              <v-col>
-                                <v-text-field
-                                  :label="'Crear nueva lista'"
-                                  v-model="newListData.key"
-                                  type="text"
-                                  :color="'primary'"
-                                ></v-text-field>
-                              </v-col>
-                            </v-row>
-                          </v-chip>
-                        </v-chip-group>
+                    <v-row class="mx-2 secondary rounded-lg">
+                      <v-col cols="6">
+                        <v-text-field
+                          :label="'Crear nuevo objeto'"
+                          v-model="newObjectData.key"
+                          type="text"
+                          :color="'primary'"
+                        ></v-text-field>
                       </v-col>
-                    </v-row>
-                  </v-list-item-content>
-                  <v-list-item-content>
-                    <v-row class="mx-2">
                       <v-col cols="6">
                         <v-text-field
                           append-outer-icon="mdi-plus-circle"
-                          label="clave a utilizar"
+                          label="valor a utilizar"
                           type="text"
                           v-model="newObjectData.value"
                           :disabled="!newObjectData.key"
@@ -84,23 +59,72 @@
                           :color="'primary'"
                         ></v-text-field>
                       </v-col>
+                    </v-row>
+                  </v-list-item-content>
+                  <v-list-item-content>
+                    <v-row class="d-flex justify-center align-center mt-1">
+                      <v-col class="mx-2">
+                        <v-card>
+                          <v-data-table
+                            class="secondary"
+                            :headers="newListHeaders"
+                            :items="newListData.list"
+                          >
+                            <template v-slot:top>
+                              <v-row class="mx-2">
+                                <v-col cols="6">
+                                  <v-text-field
+                                    :label="'nombre de la lista'"
+                                    v-model="newListData.key"
+                                    type="text"
+                                    :color="'primary'"
+                                  ></v-text-field>
+                                </v-col>
+                                <v-col cols="6">
+                                  <v-text-field
+                                    append-outer-icon="mdi-plus-circle"
+                                    label="añadir nueva cabecera"
+                                    type="text"
+                                    v-model="newHeader"
+                                    :disabled="!newListData.key"
+                                    @click:append-outer="addNewHeader()"
+                                    :color="'primary'"
+                                  ></v-text-field>
+                                </v-col>
+                              </v-row>
+                            </template>
 
-                      <v-col cols="6">
-                        <v-text-field
-                          append-outer-icon="mdi-plus-circle"
-                          label="dato a utilizar en el template!"
-                          type="text"
-                          :disabled="!newListData.key"
-                          @click:append-outer="addNewDataList()"
-                          :color="'primary'"
-                        ></v-text-field>
+                            <!-- eslint-disable-next-line -->
+                            <template v-slot:item.name="{ item }">
+                              <v-chip dark>
+                                <v-text-field
+                                  label="Regular"
+                                  placeholder="Placeholder"
+                                  v-model="item.name"
+                                ></v-text-field>
+                              </v-chip>
+                            </template>
+                            <!-- eslint-disable-next-line -->
+                            <template v-slot:item.actions="{ item }">
+                              <v-icon
+                                small
+                                class="mr-2"
+                                @click="updateGenerator(item)"
+                              >
+                                mdi-pencil
+                              </v-icon>
+                              <v-icon small @click="deleteGenerator(item)">
+                                mdi-delete
+                              </v-icon>
+                            </template>
+                          </v-data-table>
+                        </v-card>
                       </v-col>
                     </v-row>
                   </v-list-item-content>
-                  <v-divider></v-divider>
 
                   <v-list-item-content>
-                    <v-row class="mx-2">
+                    <v-row class="mx-2 mb-1 secondary rounded-lg">
                       <v-col>
                         <v-textarea
                           label="JSON DATA"
@@ -115,9 +139,30 @@
               </v-menu>
             </v-card-title>
             <v-row class="mx-3">
-              <v-col cols="12" :xs="12" :sm="6" :md="6">
-                {{ JSON.stringify(templateDefinitions) }}</v-col
-              >
+              <v-col cols="12">
+                <v-chip-group active-class="primary--text" column>
+                  <v-chip
+                    v-for="(value, key) in templateDefinitions"
+                    :key="key"
+                  >
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          icon
+                          color="primary"
+                          :style="`width: 10rem`"
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="() => handleSelectedData(key)"
+                        >
+                          {{ key }}
+                        </v-btn>
+                      </template>
+                      <span>{{ value }}</span>
+                    </v-tooltip>
+                  </v-chip>
+                </v-chip-group>
+              </v-col>
               <v-col cols="12" :xs="12" :sm="6" :md="6"> </v-col>
             </v-row>
           </v-card>
@@ -127,7 +172,7 @@
             <v-card-title class="text-h6"></v-card-title>
             <folder-structure
               :templateList="templateList"
-              @activeFile="(selectedFile) => (activeFile = selectedFile)"
+              @activeFile="(selectedFile) => onselectedFile(selectedFile)"
               @addNewItem="addNewItem"
               @deleteItem="deleteItem"
             />
@@ -138,12 +183,13 @@
             <v-col cols="12">
               <v-card class="mr-4" color="secondary" dark>
                 <v-card-title class="text-h6">{{
-                  activeFile.name + '.'+activeFile.file
+                  activeFile.name + "." + activeFile.file
                 }}</v-card-title>
                 <editor-generator
                   v-if="!!activeFile.template"
-                  v-model="activeFile.template"
-                  :templateDefinitions="templateDefinitions"
+                  :updater="editorGeneratorUpdater"
+                  :selectedFile="activeFile"
+                  :selectedData="selectedData"
                 ></editor-generator>
 
                 <v-row>
@@ -191,7 +237,11 @@ export default {
     "editor-generator": EditorGenerator,
   },
   data: () => ({
+    newHeader: "",
+    newListHeaders: [],
+    editorGeneratorUpdater: 0,
     selectedAction: "",
+    selectedData: {},
     newObjectData: { key: "", value: "" },
     newListData: { key: "", list: [] },
     newJsonData: "",
@@ -217,6 +267,26 @@ export default {
   }),
   computed: {},
   methods: {
+    addNewHeader() {
+      this.newListHeaders = [
+        ...this.newListHeaders,
+        {
+          text: this.newHeader,
+          align: "start",
+          value: this.newHeader,
+        },
+      ];
+    },
+    onselectedFile(selectedFile) {
+      this.activeFile = selectedFile;
+      this.editorGeneratorUpdater = this.editorGeneratorUpdater + 1;
+    },
+    handleSelectedData(key) {
+      const data = {};
+      data[key] = this.templateDefinitions[key];
+      this.selectedData = data;
+      this.editorGeneratorUpdater = this.editorGeneratorUpdater + 1;
+    },
     addNewJsonData() {
       try {
         const newData = JSON.parse(this.newJsonData);
