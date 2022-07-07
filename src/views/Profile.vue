@@ -15,31 +15,14 @@
 
       <v-timeline dense>
         <v-timeline-item color="secondary" fill-dot icon="mdi-account-details">
-          <user-form-data @showSucces="handleSuccesMessage" />
+          <user-form-data />
         </v-timeline-item>
         <v-timeline-item color="secondary" fill-dot icon="mdi-file-tree">
-          <generator-form
-            @showError="errorHandler"
-            @showSucces="handleSuccesMessage"
-          ></generator-form>
+          <generator-form></generator-form>
         </v-timeline-item>
       </v-timeline>
 
       <v-divider></v-divider>
-      <v-snackbar v-model="snackbar" :color="snackBarType" :vertical="true">
-        {{ snackbarText }}
-
-        <template v-slot:action="{ attrs }">
-          <v-btn
-            :color="snackBarType === 'secondary' ? 'primary' : 'secondary'"
-            text
-            v-bind="attrs"
-            @click="snackbar = false"
-          >
-            cerrar
-          </v-btn>
-        </template>
-      </v-snackbar>
 
       <v-card-actions>
         <v-row align="center" justify="center"> </v-row>
@@ -57,24 +40,9 @@ export default {
     "user-form-data": UserFormData,
     "generator-form": GeneratorForm,
   },
-  data: () => ({
-    snackbar: false,
-    snackbarText: "",
-    snackBarType: "",
-  }),
+  data: () => ({}),
   computed: {},
-  methods: {
-    errorHandler(text) {
-      this.snackbar = true;
-      this.snackbarText = text;
-      this.snackBarType = "primary";
-    },
-    handleSuccesMessage(text) {
-      this.snackbar = true;
-      this.snackbarText = text;
-      this.snackBarType = "secondary";
-    },
-  },
+  methods: {},
   mounted() {},
 };
 </script>

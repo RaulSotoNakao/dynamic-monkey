@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   data: () => ({
@@ -118,9 +118,10 @@ export default {
     },
   },
   methods: {
+    ...mapActions(["SHOW_MESSAGE_BOX_ERROR"]),
     isValidName(name) {
       if (this.generatorList.find((s) => s.name === name)) {
-        this.$emit("showError", "Amigo... no se puede repetir el nombre.");
+        this.SHOW_MESSAGE_BOX_ERROR("Amigo... no se puede repetir el nombre.");
 
         return false;
       } else {
@@ -129,7 +130,9 @@ export default {
     },
     updateGenerator(item) {
       if (this.generatorList.filter((s) => s.name === item.name).length > 1) {
-        this.$emit("showError", "Amigo... ¡Ya existe uno que se llama así!.");
+        this.SHOW_MESSAGE_BOX_ERROR(
+          "Amigo... ¡Ya existe uno que se llama así!."
+        );
       } else {
         window.ipc.send("UPDATE_GENERATOR", item);
       }

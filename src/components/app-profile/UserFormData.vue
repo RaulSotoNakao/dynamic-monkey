@@ -72,7 +72,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["UPDATE_USER_DATA"]),
+    ...mapActions(["UPDATE_USER_DATA","SHOW_MESSAGE_BOX_SUCCESS"]),
     saveUserData() {
       window.ipc.send("SAVE_USER_DATA", this.formData);
     },
@@ -93,7 +93,7 @@ export default {
     });
     window.ipc.on("SAVE_USER_DATA", (payload) => {
       this.UPDATE_USER_DATA(payload.content).then(() =>
-        this.$emit("showSucces", "los datos se han guardado correctamente :)")
+        this.SHOW_MESSAGE_BOX_SUCCESS("los datos se han guardado correctamente :)")
       );
     });
   },
