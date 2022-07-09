@@ -29,7 +29,7 @@ const getAllGeneratorData = (urlDirectorioDeTrabajo) => {
     .then((dirData) => dirData)
     .catch((err) => {
       console.log(err);
-      return []
+      return [];
     });
 };
 
@@ -65,10 +65,13 @@ const updateGenerator = (urlDirectorioDeTrabajo, generator) =>
           cwd: path.join(urlDirectorioDeTrabajo, selectedGenerator.name),
         });
         generatorStore.set("definition", generator);
-        return renameDir(
-          path.join(urlDirectorioDeTrabajo, selectedGenerator.name),
-          path.join(urlDirectorioDeTrabajo, generator.name)
-        );
+        const sameName = selectedGenerator.name === generator.name;
+        return !sameName
+          ? renameDir(
+              path.join(urlDirectorioDeTrabajo, selectedGenerator.name),
+              path.join(urlDirectorioDeTrabajo, generator.name)
+            )
+          : Promise.resolve();
       }
     })
     .catch((err) => {

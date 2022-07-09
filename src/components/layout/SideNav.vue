@@ -47,7 +47,7 @@
 
         <v-list-item-title>Generadores</v-list-item-title>
       </v-subheader>
-      <!-- GENERATOR  -->
+      <!-- GENERATOR LIST -->
 
       <v-list-item
         v-for="item in generatorList"

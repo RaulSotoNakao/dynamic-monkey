@@ -145,9 +145,9 @@ export default {
         window.ipc.send("ADD_GENERATOR", {
           id: new Date().valueOf(),
           name: this.newGeneratorName,
-          dirName: this.newGeneratorName,
           categories: [],
           templatesList: [],
+          templateDefinitions: {}
         });
       }
     },

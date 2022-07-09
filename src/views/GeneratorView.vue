@@ -39,7 +39,7 @@
                   v-if="!!activeFile.template"
                   :updater="editorGeneratorUpdater"
                   :selectedFile="activeFile"
-                  :selectedData="selectedData"
+                  :selectedData="selectedGenerator"
                 ></editor-generator>
 
                 <v-row>
@@ -60,15 +60,6 @@
         </v-col>
       </v-row>
       <v-divider></v-divider>
-      <v-snackbar v-model="snackbar" :vertical="true">
-        {{ snackbarText }}
-
-        <template v-slot:action="{ attrs }">
-          <v-btn color="primary" text v-bind="attrs" @click="snackbar = false">
-            cerrar
-          </v-btn>
-        </template>
-      </v-snackbar>
 
       <v-card-actions>
         <v-row align="center" justify="center"> </v-row>
@@ -81,6 +72,7 @@
 import FolderStructure from "../components/app-generator/FolderStructure.vue";
 import EditorGenerator from "../components/app-generator/EditorGenerator.vue";
 import DataGenerator from '../components/app-generator/dataGenerator.vue';
+import { mapActions, mapGetters} from 'vuex'
 
 export default {
   components: {
@@ -89,11 +81,7 @@ export default {
     DataGenerator,
   },
   data: () => ({
-    newHeader: "",
-    newListHeaders: [],
-    editorGeneratorUpdater: 0,
     selectedAction: "",
-    selectedData: {},
     newObjectData: { key: "", value: "" },
     newListData: { key: "", list: [] },
     newJsonData: "",
@@ -112,50 +100,17 @@ export default {
         ],
       },
     ],
-    snackbar: false,
-    snackbarText: "",
     isLoading: true,
     activeFile: {},
   }),
-  computed: {},
+  computed: {
+    ...mapActions(["selectedGenerator"]), 
+  },
   methods: {
-    addNewHeader() {
-      this.newListHeaders = [
-        ...this.newListHeaders,
-        {
-          text: this.newHeader,
-          align: "start",
-          value: this.newHeader,
-        },
-      ];
-    },
+    ...mapActions(["UPDATE_SELECTED_GENERATOR"]), 
     onselectedFile(selectedFile) {
       this.activeFile = selectedFile;
       this.editorGeneratorUpdater = this.editorGeneratorUpdater + 1;
-    },
-    handleSelectedData(key) {
-      const data = {};
-      data[key] = this.templateDefinitions[key];
-      this.selectedData = data;
-      this.editorGeneratorUpdater = this.editorGeneratorUpdater + 1;
-    },
-    addNewJsonData() {
-      try {
-        const newData = JSON.parse(this.newJsonData);
-        this.templateDefinitions = { ...this.templateDefinitions, ...newData };
-      } catch (error) {
-        this.snackbar = true;
-        this.snackbarText = error;
-      }
-    },
-    addNewDataList() {},
-    addNewObject() {
-      const newData = {};
-      newData[this.newObjectData.key] = this.newObjectData.value;
-
-      this.templateDefinitions = { ...this.templateDefinitions, ...newData };
-      this.newObjectData.key = "";
-      this.newObjectData.value = "";
     },
     saveTemplate() {
       this.recursiveUpdateTemplate(this.templateList, this.activeFile.id);
@@ -199,7 +154,7 @@ export default {
   mounted() {},
   created() {
     //on first time
-    window.ipc.send("GET_GENERATOR", this.$route.params);
+    window.ipc.send("GET_GENERATOR", this.$route.params.name);
     //on change params
     this.$watch(
       () => this.$route.params,
@@ -210,7 +165,7 @@ export default {
     );
     window.ipc.on("GET_GENERATOR", (payload) => {
       this.isLoading = false;
-      // this.templateList = payload.content;
+      this.UPDATE_SELECTED_GENERATOR(payload.content)
     });
   },
 };

@@ -11,106 +11,158 @@
 
         <v-card>
           <v-card-title>¡A crear nuevos datos!</v-card-title>
-          <v-list-item-content>
-            <v-row class="mx-2 secondary rounded-lg">
-              <v-col cols="6">
-                <v-text-field
-                  :label="'Crear nuevo objeto'"
-                  v-model="newObjectData.key"
-                  type="text"
-                  :color="'primary'"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="6">
-                <v-text-field
-                  append-outer-icon="mdi-plus-circle"
-                  label="valor a utilizar"
-                  type="text"
-                  v-model="newObjectData.value"
-                  :disabled="!newObjectData.key"
-                  @click:append-outer="addNewObject()"
-                  :color="'primary'"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-list-item-content>
-          <v-list-item-content>
-            <v-row class="d-flex justify-center align-center mt-1">
-              <v-col class="mx-2">
-                <v-card>
-                  <v-data-table
-                    class="secondary"
-                    :headers="newListHeaders"
-                    :items="newListData.list"
-                  >
-                    <template v-slot:top>
-                      <v-row class="mx-2">
-                        <v-col cols="6">
-                          <v-text-field
-                            :label="'nombre de la lista'"
-                            v-model="newListData.key"
-                            type="text"
-                            :color="'primary'"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="6">
-                          <v-text-field
-                            append-outer-icon="mdi-plus-circle"
-                            label="añadir nueva cabecera"
-                            type="text"
-                            v-model="newHeader"
-                            :disabled="!newListData.key"
-                            @click:append-outer="addNewHeader()"
-                            :color="'primary'"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </template>
+          <v-expansion-panels>
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                Crear nueva lista
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-list-item-content>
+                  <v-row class="d-flex justify-center align-center mt-1">
+                    <v-col class="mx-2" cols="11">
+                      <v-card>
+                        <v-data-table
+                          dense
+                          class="secondary"
+                          :headers="newListHeaders"
+                          :items="newListData.list"
+                        >
+                          <template v-slot:top>
+                            <v-row class="mx-2">
+                              <v-col cols="6">
+                                <v-text-field
+                                  :label="'nombre de la lista'"
+                                  v-model="newListData.key"
+                                  type="text"
+                                  :color="'primary'"
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="6">
+                                <v-text-field
+                                  append-outer-icon="mdi-plus-circle"
+                                  label="añadir nueva cabecera"
+                                  type="text"
+                                  v-model="newHeader"
+                                  :disabled="!newListData.key"
+                                  @click:append-outer="addNewHeader()"
+                                  :color="'primary'"
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="6">
+                                <v-btn
+                                  class=""
+                                  small
+                                  color="primary"
+                                  @click="addNewTableRegistry"
+                                >
+                                  añadir nuevo registro
+                                </v-btn>
+                              </v-col>
+                            </v-row>
+                          </template>
+                          <!-- eslint-disable-next-line -->
+                          <template v-slot:body="{ items }">
+                            <tr v-for="(item, id) in items" :key="id">
+                              <td
+                                v-for="header in newListHeaders"
+                                :key="header.value"
+                              >
+                                <v-text-field
+                                  class="ml-2 text-caption"
+                                  v-if="header.value !== 'actions'"
+                                  placeholder="Placeholder"
+                                  v-model="item[header.value]"
+                                ></v-text-field>
+                                <div v-else class="d-flex justify-center">
+                                  <v-icon small @click="deleteListItem(id)">
+                                    mdi-delete
+                                  </v-icon>
+                                </div>
+                              </td>
+                            </tr>
+                          </template>
+                        </v-data-table>
+                      </v-card>
+                    </v-col>
+                    <v-col class="mx-2" cols="6">
+                      <v-btn
+                        class="mx-2"
+                        small
+                        color="secondary"
+                        @click="newList"
+                      >
+                        nueva lista
+                      </v-btn>
 
-                    <!-- eslint-disable-next-line -->
-                    <template v-slot:item.name="{ item }">
-                      <v-chip dark>
-                        <v-text-field
-                          label="Regular"
-                          placeholder="Placeholder"
-                          v-model="item.name"
-                        ></v-text-field>
-                      </v-chip>
-                    </template>
-                    <!-- eslint-disable-next-line -->
-                    <template v-slot:item.actions="{ item }">
-                      <v-icon small class="mr-2" @click="updateGenerator(item)">
-                        mdi-pencil
-                      </v-icon>
-                      <v-icon small @click="deleteGenerator(item)">
-                        mdi-delete
-                      </v-icon>
-                    </template>
-                  </v-data-table>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-list-item-content>
+                      <v-btn class="" small color="primary" @click="saveList">
+                        guardar lista
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-list-item-content>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                Crear nuevo objeto
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-list-item-content>
+                  <v-row class="mx-2 secondary rounded-lg">
+                    <v-col cols="6">
+                      <v-text-field
+                        :label="'Crear nuevo objeto'"
+                        v-model="newObjectData.key"
+                        type="text"
+                        :color="'primary'"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        append-outer-icon="mdi-plus-circle"
+                        label="valor a utilizar"
+                        type="text"
+                        v-model="newObjectData.value"
+                        :disabled="!newObjectData.key"
+                        @click:append-outer="addNewObject()"
+                        :color="'primary'"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-list-item-content>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
 
-          <v-list-item-content>
-            <v-row class="mx-2 mb-1 secondary rounded-lg">
-              <v-col>
-                <v-textarea
-                  label="JSON DATA"
-                  append-outer-icon="mdi-plus-circle"
-                  v-model="newJsonData"
-                  @click:append-outer="addNewJsonData()"
-                ></v-textarea>
-              </v-col>
-            </v-row>
-          </v-list-item-content>
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                crear datos a partir de json
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-list-item-content>
+                  <v-row class="mx-2 mb-1 secondary rounded-lg">
+                    <v-col>
+                      <v-textarea
+                        label="JSON DATA"
+                        append-outer-icon="mdi-plus-circle"
+                        v-model="newJsonData"
+                        @click:append-outer="addNewJsonData()"
+                      ></v-textarea>
+                    </v-col>
+                  </v-row>
+                </v-list-item-content>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </v-card>
       </v-menu>
     </v-card-title>
     <v-row class="mx-3">
       <v-col cols="12">
         <v-chip-group active-class="primary--text" column>
-          <v-chip v-for="(value, key) in templateDefinitions" :key="key">
+          <v-chip
+            v-for="(value, key) in this.selectedGenerator.templateDefinitions"
+            :key="key"
+          >
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -122,6 +174,15 @@
                   @click="() => handleSelectedData(key)"
                 >
                   {{ key }}
+                </v-btn>
+                <v-btn
+                  x-small
+                  icon
+                  color="white"
+                  dark
+                  @click="() => deleteData(key)"
+                >
+                  <v-icon> mdi-delete-forever </v-icon>
                 </v-btn>
               </template>
               <span>{{ value }}</span>
@@ -135,27 +196,82 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   data: () => ({
     newHeader: "",
-    newListHeaders: [],
+    newListHeaders: [{ text: "Acciones", value: "actions", sortable: false }],
     newObjectData: { key: "", value: "" },
     newListData: { key: "", list: [] },
     newJsonData: "",
     templateDefinitions: {},
     selectedData: {},
   }),
+  computed: {
+    ...mapGetters(["selectedGenerator"]),
+  },
   methods: {
     ...mapActions(["SHOW_MESSAGE_BOX_ERROR"]),
-    addNewHeader() {
+    deleteListItem(key) {
+      const list = this.newListData.list;
+      this.newListData.list = [
+        ...list.slice(0, key),
+        ...list.slice(key + 1, list.length),
+      ];
+    },
+    saveList() {
+      const newData = {};
+      newData[this.newListData.key] = this.newListData.list;
+      const beforeDefinitions =
+        this.selectedGenerator.templateDefinitions || {};
+      const templateDefinitions = { ...beforeDefinitions, ...newData };
+
+      window.ipc.send("UPDATE_GENERATOR", {
+        ...this.selectedGenerator,
+        templateDefinitions,
+      });
+      this.newList();
+      window.ipc.send("GET_GENERATOR", this.selectedGenerator.name);
+    },
+    newList() {
       this.newListHeaders = [
-        ...this.newListHeaders,
+        { text: "Acciones", value: "actions", sortable: false },
+      ];
+      this.newListData = { key: "", list: [] };
+    },
+    addNewTableRegistry() {
+      const newRegistrye = this.newListHeaders
+        .filter((h) => h.value !== "actions")
+        .map((h) => h.value);
+      const newRegistry = newRegistrye.reduce((acc, key) => {
+        acc[key] = "";
+        return acc;
+      }, {});
+      this.newListData.list = [...this.newListData.list, newRegistry];
+    },
+    addNewHeader() {
+      if (this.newListHeaders.find((h) => h.value === this.newHeader)) {
+        this.SHOW_MESSAGE_BOX_ERROR(
+          "Amigo... no pueden existir 2 cabeceras iguales."
+        );
+        return "";
+      }
+
+      const oldHeadersWithoutActions = this.newListHeaders.filter(
+        (h) => h.value !== "actions"
+      );
+      const actionHeader = this.newListHeaders.filter(
+        (h) => h.value === "actions"
+      );
+
+      this.newListHeaders = [
+        ...oldHeadersWithoutActions,
         {
           text: this.newHeader,
-          align: "start",
+          align: "center",
           value: this.newHeader,
         },
+        ...actionHeader,
       ];
     },
     handleSelectedData(key) {
@@ -167,7 +283,16 @@ export default {
     addNewJsonData() {
       try {
         const newData = JSON.parse(this.newJsonData);
-        this.templateDefinitions = { ...this.templateDefinitions, ...newData };
+        const beforeDefinitions =
+          this.selectedGenerator.templateDefinitions || {};
+        const templateDefinitions = { ...beforeDefinitions, ...newData };
+
+        window.ipc.send("UPDATE_GENERATOR", {
+          ...this.selectedGenerator,
+          templateDefinitions,
+        });
+        this.newJsonData = "";
+        window.ipc.send("GET_GENERATOR", this.selectedGenerator.name);
       } catch (error) {
         this.SHOW_MESSAGE_BOX_ERROR("Amigo... el formato json no es correcto.");
       }
@@ -176,10 +301,31 @@ export default {
     addNewObject() {
       const newData = {};
       newData[this.newObjectData.key] = this.newObjectData.value;
+      const beforeDefinitions =
+        this.selectedGenerator.templateDefinitions || {};
+      const templateDefinitions = { ...beforeDefinitions, ...newData };
 
-      this.templateDefinitions = { ...this.templateDefinitions, ...newData };
+      window.ipc.send("UPDATE_GENERATOR", {
+        ...this.selectedGenerator,
+        templateDefinitions,
+      });
       this.newObjectData.key = "";
       this.newObjectData.value = "";
+      window.ipc.send("GET_GENERATOR", this.selectedGenerator.name);
+    },
+    deleteData(key) {
+      const dataList = Object.entries(
+        this.selectedGenerator.templateDefinitions
+      );
+      const newData = dataList.filter((data) => data[0] !== key);
+      const templateDefinitions = newData.length
+        ? Object.fromEntries(newData)
+        : [];
+      window.ipc.send("UPDATE_GENERATOR", {
+        ...this.selectedGenerator,
+        templateDefinitions,
+      });
+      window.ipc.send("GET_GENERATOR", this.selectedGenerator.name);
     },
   },
 };
