@@ -146,8 +146,14 @@ export default {
           id: new Date().valueOf(),
           name: this.newGeneratorName,
           categories: [],
-          templatesList: [],
-          templateDefinitions: {}
+          templatesList: [
+            {
+              id: "base",
+              name: "base-dir",
+              children: [],
+            },
+          ],
+          templateDefinitions: {},
         });
       }
     },

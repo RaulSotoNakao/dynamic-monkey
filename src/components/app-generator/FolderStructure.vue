@@ -1,7 +1,7 @@
 <template>
   <v-treeview
     :open="initiallyOpen"
-    :items="templateList"
+    :items="selectedGenerator.templatesList"
     activatable
     @update:active="activeTreeClick"
     item-key="id"
@@ -94,14 +94,13 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 export default {
-  props: {
-    templateList: {
-      type: Array,
-      required: true,
-    },
+  props: {},
+  computed: {
+    ...mapGetters(["selectedGenerator"]),
   },
-  computed: {},
   data: () => ({
     initiallyOpen: ["base-dir"],
     files: {
@@ -116,9 +115,10 @@ export default {
     newItemTreeView: "",
   }),
   methods: {
+    ...mapActions(["UPDATE_SELECTED_TEMPLATE"]),
     activeTreeClick(val = []) {
       if (val.length && val[0].file) {
-        this.$emit("activeFile", val[0]);
+        this.UPDATE_SELECTED_TEMPLATE(val[0]);
       }
     },
     addNewItem(item) {
@@ -136,13 +136,46 @@ export default {
           itemToAdd.template = `Hello {{name}}\n\rYou have just won {{value}} dollars!\{{#in_ca}}\n\rWell, {{taxed_value}} dollars, after taxes.\n\r{{/in_ca}}
 `;
         }
-        this.$emit("addNewItem", { id: item.id, itemToAdd });
+        const newTemplateList = this.recursiveAdd(
+          this.selectedGenerator.templatesList,
+          item.id,
+          itemToAdd
+        );
+        window.ipc.send("UPDATE_GENERATOR", {
+          ...this.selectedGenerator,
+          templatesList: newTemplateList,
+        });
 
         this.newItemTreeView = "";
       }
     },
+    recursiveAdd(list, id, itemToAdd) {
+      return list.map((item) => {
+        if (item.id === id) {
+          item.children = [itemToAdd, ...item.children];
+        } else if (item.children && item.children.length) {
+          item.children = this.recursiveAdd(item.children, id, itemToAdd);
+        }
+        return item;
+      });
+    },
     deleteItem(item) {
-      this.$emit("deleteItem", item.id);
+      const newTemplateList = this.recursiveRemove(
+        this.selectedGenerator.templatesList,
+        item.id
+      );
+      window.ipc.send("UPDATE_GENERATOR", {
+        ...this.selectedGenerator,
+        templatesList: newTemplateList,
+      });
+    },
+    recursiveRemove(list, id) {
+      return list.filter((item) => {
+        if ("children" in item) {
+          item.children = this.recursiveRemove(item.children, id);
+        }
+        return item.id !== id;
+      });
     },
   },
   watch: {},

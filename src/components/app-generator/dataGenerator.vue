@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-4" color="secondary" dark>
+  <v-card class="" color="secondary" dark>
     <v-card-title class="text-h6">
       Datos disponibles
       <v-menu :close-on-content-click="false" :nudge-width="200" offset-x>
@@ -204,14 +204,12 @@ export default {
     newObjectData: { key: "", value: "" },
     newListData: { key: "", list: [] },
     newJsonData: "",
-    templateDefinitions: {},
-    selectedData: {},
   }),
   computed: {
     ...mapGetters(["selectedGenerator"]),
   },
   methods: {
-    ...mapActions(["SHOW_MESSAGE_BOX_ERROR"]),
+    ...mapActions(["SHOW_MESSAGE_BOX_ERROR", "UPDATE_SELECTED_DATA"]),
     deleteListItem(key) {
       const list = this.newListData.list;
       this.newListData.list = [
@@ -276,8 +274,8 @@ export default {
     },
     handleSelectedData(key) {
       const data = {};
-      data[key] = this.templateDefinitions[key];
-      this.selectedData = data;
+      data[key] = this.selectedGenerator.templateDefinitions[key];
+      this.UPDATE_SELECTED_DATA(data);
       //this will be a event
     },
     addNewJsonData() {
