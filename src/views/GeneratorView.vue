@@ -10,8 +10,22 @@
       :loading="isLoading"
     >
       <v-card-title>
-        <v-icon large left> mdi-table-cog </v-icon>
-        <span class="text-h6 font-weight-light">Generador</span>
+        <v-row class="">
+          <v-col>
+            <v-icon large left> mdi-table-cog </v-icon>
+            <span class="text-h6 font-weight-light">Generador</span>
+          </v-col>
+          <v-col class="d-flex justify-end">
+            <v-btn
+              color="primary"
+              class="mx-2 text-sm-body-2"
+              @click="() => executeGenerator()"
+            >
+              Generar estructura
+              <v-icon right> mdi-eye </v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-card-title>
       <v-row>
         <v-col cols="4">
@@ -61,10 +75,19 @@ export default {
     activeFile: {},
   }),
   computed: {
-    ...mapActions(["selectedGenerator"]),
+    ...mapGetters(["selectedGenerator"]),
   },
   methods: {
-    ...mapActions(["UPDATE_SELECTED_GENERATOR"]),
+    ...mapActions([
+      "UPDATE_SELECTED_GENERATOR",
+      "UPDATE_SELECTED_DATA",
+      "UPDATE_SELECTED_TEMPLATE",
+    ]),
+    executeGenerator() {
+      window.ipc.send("GENERATE_STRUCTURE_GENERATOR", {
+        selectedGenerator: this.selectedGenerator,
+      });
+    },
   },
   mounted() {},
   created() {
@@ -76,6 +99,8 @@ export default {
       (toParams, previousParams) => {
         this.isLoading = true;
         window.ipc.send("GET_GENERATOR", toParams.name);
+        this.UPDATE_SELECTED_DATA({});
+        this.UPDATE_SELECTED_TEMPLATE({});
       }
     );
     window.ipc.on("GET_GENERATOR", (payload) => {

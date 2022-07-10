@@ -73,6 +73,17 @@
               </v-chip>
             </template>
             <!-- eslint-disable-next-line -->
+            <template v-slot:item.dirToCreateStructure="{ item }">
+              <v-chip dark>
+                <v-text-field
+                  label="Regular"
+                  placeholder="Placeholder"
+                  v-model="item.dirToCreateStructure"
+                ></v-text-field>
+              </v-chip>
+            </template>
+
+            <!-- eslint-disable-next-line -->
             <template v-slot:item.actions="{ item }">
               <v-icon small class="mr-2" @click="updateGenerator(item)">
                 mdi-pencil
@@ -100,11 +111,12 @@ export default {
         value: "name",
       },
       {
-        text: "categorías",
+        text: "Dir To Create Structure",
         align: "start",
-        sortable: false,
-        value: "categories",
+        sortable: true,
+        value: "dirToCreateStructure",
       },
+
       { text: "Acciones", value: "actions", align: "end", sortable: false },
     ],
   }),
@@ -145,6 +157,7 @@ export default {
         window.ipc.send("ADD_GENERATOR", {
           id: new Date().valueOf(),
           name: this.newGeneratorName,
+          dirToCreateStructure: "",
           categories: [],
           templatesList: [
             {

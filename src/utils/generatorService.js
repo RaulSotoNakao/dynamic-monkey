@@ -1,13 +1,65 @@
 import {
   getFilesNamesOfDirectory,
   readFile,
+  writeFile,
   createDir,
   renameDir,
   removeRecursively,
 } from "./fileSystemService";
 const Store = require("electron-store");
+import Mustache from "mustache";
 
 import path from "path";
+
+const recursiveCreator = (
+  templatesList,
+  dirToCreateStructure,
+  templateDefinitions
+) => {
+  return templatesList.reduce((previousPromise, item) => {
+    return previousPromise
+      .then(() => {
+        if (!!item.file) {
+          const rendered = Mustache.render(item.template, templateDefinitions);
+          const file = path.join(dirToCreateStructure, item.name);
+          return writeFile(file, rendered)
+            .then(() => console.log(item.name))
+            .catch((err) => console.log(err));
+        } else if (item.children && item.children.length) {
+          return createDir(path.join(dirToCreateStructure, item.name))
+            .catch(() => true)
+            .then(() =>
+              recursiveCreator(
+                item.children,
+                path.join(dirToCreateStructure, item.name),
+                templateDefinitions
+              )
+            )
+            .then(() => console.log(item.name))
+            .catch((err) => console.log(err));
+        } else {
+          return Promise.resolve(true);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, Promise.resolve());
+};
+
+const generateStructureGenerator = async ({ selectedGenerator }) => {
+  const { dirToCreateStructure } = selectedGenerator;
+  const { templateDefinitions } = selectedGenerator;
+  const { templatesList } = selectedGenerator;
+
+  // 1º Recorro todos los listados recursivamente
+  // 2º voy creando carpetas
+  // 3º voy renderizando con mustache los templates
+
+  return recursiveCreator(
+    templatesList,
+    dirToCreateStructure,
+    templateDefinitions
+  );
+};
 
 const getAllGeneratorData = (urlDirectorioDeTrabajo) => {
   const snippetList = urlDirectorioDeTrabajo
@@ -115,4 +167,5 @@ export {
   updateGenerator,
   getGeneratorByName,
   deleteGenerator,
+  generateStructureGenerator,
 };

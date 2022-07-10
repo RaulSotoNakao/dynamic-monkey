@@ -17,11 +17,18 @@ import {
   updateGenerator,
   deleteGenerator,
   getGeneratorByName,
+  generateStructureGenerator,
 } from "./utils/generatorService";
 const isDevelopment = process.env.NODE_ENV !== "production";
 const Store = require("electron-store");
 import path from "path";
 const store = new Store();
+
+ipcMain.on("GENERATE_STRUCTURE_GENERATOR", (event, payload) => {
+  generateStructureGenerator(payload)
+    .then(() => event.reply("GENERATE_STRUCTURE_GENERATOR", true))
+    .catch(() => event.reply("GENERATE_STRUCTURE_GENERATOR", false));
+});
 
 ipcMain.on("SELECT_DIRECTORY", (event) => {
   dialog

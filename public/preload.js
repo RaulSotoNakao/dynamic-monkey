@@ -10,7 +10,8 @@ const validChannels = [
   "ADD_GENERATOR",
   "UPDATE_GENERATOR",
   "DELETE_GENERATOR",
-  "GET_GENERATOR"
+  "GET_GENERATOR",
+  "GENERATE_STRUCTURE_GENERATOR"
 ];
 contextBridge.exposeInMainWorld("ipc", {
   send: (channel, data) => {
