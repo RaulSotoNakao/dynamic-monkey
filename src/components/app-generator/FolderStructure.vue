@@ -133,8 +133,7 @@ export default {
           itemToAdd.children = [];
         } else {
           itemToAdd.file = this.newItemType;
-          itemToAdd.template = `Hello {{name}}\n\rYou have just won {{value}} dollars!\{{#in_ca}}\n\rWell, {{taxed_value}} dollars, after taxes.\n\r{{/in_ca}}
-`;
+          itemToAdd.template = ``;
         }
         const newTemplateList = this.recursiveAdd(
           this.selectedGenerator.templatesList,

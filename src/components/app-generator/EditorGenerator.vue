@@ -26,7 +26,9 @@
             <v-col cols="12">
               <v-text-field
                 append-outer-icon="mdi-find-replace"
-                :label="`Buscar ${stringToReplace ? `'${stringToReplace}'` :'texto'} y remplazar por el dato ${selectedLabel}!`"
+                :label="`Buscar ${
+                  stringToReplace ? `'${stringToReplace}'` : 'texto'
+                } y remplazar por el dato ${selectedLabel}!`"
                 type="text"
                 @click:append-outer="findAndReplace()"
                 :color="'primary'"
@@ -35,11 +37,20 @@
             </v-col>
           </v-row>
           <v-textarea
+            v-if="!render.active"
             counter
             auto-grow
             label="Template"
-            :value="template"
+            v-model="template"
           ></v-textarea>
+          <v-textarea
+            v-else
+            counter
+            auto-grow
+            label="Template"
+            :value="render.template"
+          ></v-textarea>
+
           <!-- <v-sheet
             id="my-code-editor"
             ref="code-editor"
@@ -56,8 +67,22 @@
         </v-container>
         <v-row>
           <v-col class="d-flex justify-end mt-2">
-            <v-btn color="info" class="mx-2" @click="() => saveTemplate()">
+            <v-btn
+              v-if="!render.active"
+              color="info"
+              class="mx-2"
+              @click="() => renderTemplate()"
+            >
               renderizado
+              <v-icon right> mdi-eye </v-icon>
+            </v-btn>
+            <v-btn
+              v-if="render.active"
+              color="info"
+              class="mx-2"
+              @click="() => (render.active = false)"
+            >
+              mostrar template
               <v-icon right> mdi-eye </v-icon>
             </v-btn>
 
@@ -74,12 +99,16 @@
 
 <script>
 import { mapGetters } from "vuex";
-
+import Mustache from "mustache";
 export default {
   props: {},
   data: () => ({
     template: "",
     stringToReplace: "",
+    render: {
+      active: false,
+      template: "",
+    },
   }),
   computed: {
     ...mapGetters(["selectedData", "selectedTemplate", "selectedGenerator"]),
@@ -89,6 +118,13 @@ export default {
     },
   },
   methods: {
+    renderTemplate() {
+      this.render.active = true;
+      this.render.template = Mustache.render(
+        this.template,
+        this.selectedGenerator.templateDefinitions
+      );
+    },
     saveTemplate() {
       const newTemplateList = this.recursiveUpdateTemplate(
         this.selectedGenerator.templatesList,
@@ -117,7 +153,9 @@ export default {
       const stringToReplace = isArray
         ? `
         {{#${this.selectedLabel}}}
-        ${Object.keys(this.selectedData[this.selectedLabel][0]).map((key) => `{{${key}}}`).join(" ")}
+        ${Object.keys(this.selectedData[this.selectedLabel][0])
+          .map((key) => `{{${key}}}`)
+          .join(" ")}
         {{/${this.selectedLabel}}}
         `
         : `{{${this.selectedLabel}}}`;
