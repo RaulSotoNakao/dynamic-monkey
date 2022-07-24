@@ -10,7 +10,7 @@ import {
 } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
-
+import { dynamicImportElectronaApi } from "./electronApi/electronApiNext";
 import {
   getAllGeneratorData,
   addNewGenerator,
@@ -23,6 +23,10 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 const Store = require("electron-store");
 import path from "path";
 const store = new Store();
+console.log(__dirname)
+
+
+dynamicImportElectronaApi(ipcMain)
 
 ipcMain.on("GENERATE_STRUCTURE_GENERATOR", (event, payload) => {
   generateStructureGenerator(payload)
@@ -118,7 +122,7 @@ async function createWindow() {
       enableRemoteModule: false,
 
       // __static is set by webpack and will point to the public directory
-      preload: path.resolve(__static, "preload.js"),
+      preload: path.resolve(__dirname, "preload.js"),
     },
   });
 

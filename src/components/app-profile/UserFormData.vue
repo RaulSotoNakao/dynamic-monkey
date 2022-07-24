@@ -87,7 +87,10 @@ export default {
   },
   mounted() {
     this.formData = this.userData || {};
-
+    console.log(window.ipc)
+    window.ipc.SELECT_DIRECTORY('jolin').then(result => {
+      console.log(result)
+    })
     window.ipc.on("SELECT_DIRECTORY", (payload) => {
       this.formData.urlDirectorioDeTrabajo = payload.selected_dir;
     });
