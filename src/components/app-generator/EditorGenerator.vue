@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Mustache from "mustache";
 export default {
   props: {},
@@ -118,6 +118,8 @@ export default {
     },
   },
   methods: {
+    ...mapActions(["UPDATE_SELECTED_GENERATOR"]),
+
     renderTemplate() {
       this.render.active = true;
       this.render.template = Mustache.render(
@@ -130,12 +132,15 @@ export default {
         this.selectedGenerator.templatesList,
         this.selectedTemplate.id
       );
-
-      window.ipc.send("UPDATE_GENERATOR", {
-        ...this.selectedGenerator,
-        templatesList: newTemplateList,
-      });
-      window.ipc.send("GET_GENERATOR", this.selectedGenerator.name);
+      window.ipc
+        .UPDATE_GENERATOR({
+          ...this.selectedGenerator,
+          templatesList: newTemplateList,
+        })
+        .then(() => window.ipc.GET_GENERATOR(this.selectedGenerator.name))
+        .then((payload) => {
+          this.UPDATE_SELECTED_GENERATOR(payload.content);
+        });
     },
     recursiveUpdateTemplate(list, id) {
       return list.map((item) => {

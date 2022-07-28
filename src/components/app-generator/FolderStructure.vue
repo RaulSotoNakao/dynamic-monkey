@@ -115,7 +115,7 @@ export default {
     newItemTreeView: "",
   }),
   methods: {
-    ...mapActions(["UPDATE_SELECTED_TEMPLATE"]),
+    ...mapActions(["UPDATE_SELECTED_TEMPLATE", "UPDATE_SELECTED_GENERATOR"]),
     activeTreeClick(val = []) {
       if (val.length && val[0].file) {
         this.UPDATE_SELECTED_TEMPLATE(val[0]);
@@ -140,10 +140,16 @@ export default {
           item.id,
           itemToAdd
         );
-        window.ipc.send("UPDATE_GENERATOR", {
-          ...this.selectedGenerator,
-          templatesList: newTemplateList,
-        });
+
+        window.ipc
+          .UPDATE_GENERATOR({
+            ...this.selectedGenerator,
+            templatesList: newTemplateList,
+          })
+          .then(() => window.ipc.GET_GENERATOR(this.selectedGenerator.name))
+          .then((payload) => {
+            this.UPDATE_SELECTED_GENERATOR(payload.content);
+          });
 
         this.newItemTreeView = "";
       }
@@ -163,10 +169,15 @@ export default {
         this.selectedGenerator.templatesList,
         item.id
       );
-      window.ipc.send("UPDATE_GENERATOR", {
-        ...this.selectedGenerator,
-        templatesList: newTemplateList,
-      });
+      window.ipc
+        .UPDATE_GENERATOR({
+          ...this.selectedGenerator,
+          templatesList: newTemplateList,
+        })
+        .then(() => window.ipc.GET_GENERATOR(this.selectedGenerator.name))
+        .then((payload) => {
+          this.UPDATE_SELECTED_GENERATOR(payload.content);
+        });
     },
     recursiveRemove(list, id) {
       return list.filter((item) => {

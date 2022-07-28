@@ -208,8 +208,13 @@ export default {
   computed: {
     ...mapGetters(["selectedGenerator"]),
   },
+
   methods: {
-    ...mapActions(["SHOW_MESSAGE_BOX_ERROR", "UPDATE_SELECTED_DATA"]),
+    ...mapActions([
+      "SHOW_MESSAGE_BOX_ERROR",
+      "UPDATE_SELECTED_DATA",
+      "UPDATE_SELECTED_GENERATOR",
+    ]),
     deleteListItem(key) {
       const list = this.newListData.list;
       this.newListData.list = [
@@ -224,12 +229,16 @@ export default {
         this.selectedGenerator.templateDefinitions || {};
       const templateDefinitions = { ...beforeDefinitions, ...newData };
 
-      window.ipc.send("UPDATE_GENERATOR", {
-        ...this.selectedGenerator,
-        templateDefinitions,
-      });
-      this.newList();
-      window.ipc.send("GET_GENERATOR", this.selectedGenerator.name);
+      window.ipc
+        .UPDATE_GENERATOR({
+          ...this.selectedGenerator,
+          templateDefinitions,
+        })
+        .then(() => this.newList())
+        .then(() => window.ipc.GET_GENERATOR(this.selectedGenerator.name))
+        .then((payload) => {
+          this.UPDATE_SELECTED_GENERATOR(payload.content);
+        });
     },
     newList() {
       this.newListHeaders = [
@@ -284,13 +293,16 @@ export default {
         const beforeDefinitions =
           this.selectedGenerator.templateDefinitions || {};
         const templateDefinitions = { ...beforeDefinitions, ...newData };
-
-        window.ipc.send("UPDATE_GENERATOR", {
+      window.ipc
+        .UPDATE_GENERATOR({
           ...this.selectedGenerator,
           templateDefinitions,
+        })
+        .then(() => window.ipc.GET_GENERATOR(this.selectedGenerator.name))
+        .then((payload) => {
+          this.UPDATE_SELECTED_GENERATOR(payload.content);
         });
         this.newJsonData = "";
-        window.ipc.send("GET_GENERATOR", this.selectedGenerator.name);
       } catch (error) {
         this.SHOW_MESSAGE_BOX_ERROR("Amigo... el formato json no es correcto.");
       }
@@ -303,13 +315,18 @@ export default {
         this.selectedGenerator.templateDefinitions || {};
       const templateDefinitions = { ...beforeDefinitions, ...newData };
 
-      window.ipc.send("UPDATE_GENERATOR", {
-        ...this.selectedGenerator,
-        templateDefinitions,
-      });
+      window.ipc
+        .UPDATE_GENERATOR({
+          ...this.selectedGenerator,
+          templateDefinitions,
+        })
+        .then(() => window.ipc.GET_GENERATOR(this.selectedGenerator.name))
+        .then((payload) => {
+          this.UPDATE_SELECTED_GENERATOR(payload.content);
+        });
+
       this.newObjectData.key = "";
       this.newObjectData.value = "";
-      window.ipc.send("GET_GENERATOR", this.selectedGenerator.name);
     },
     deleteData(key) {
       const dataList = Object.entries(
@@ -319,11 +336,15 @@ export default {
       const templateDefinitions = newData.length
         ? Object.fromEntries(newData)
         : [];
-      window.ipc.send("UPDATE_GENERATOR", {
-        ...this.selectedGenerator,
-        templateDefinitions,
-      });
-      window.ipc.send("GET_GENERATOR", this.selectedGenerator.name);
+      window.ipc
+        .UPDATE_GENERATOR({
+          ...this.selectedGenerator,
+          templateDefinitions,
+        })
+        .then(() => window.ipc.GET_GENERATOR(this.selectedGenerator.name))
+        .then((payload) => {
+          this.UPDATE_SELECTED_GENERATOR(payload.content);
+        });
     },
   },
 };

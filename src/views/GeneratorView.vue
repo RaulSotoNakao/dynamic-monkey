@@ -84,7 +84,7 @@ export default {
       "UPDATE_SELECTED_TEMPLATE",
     ]),
     executeGenerator() {
-      window.ipc.send("GENERATE_STRUCTURE_GENERATOR", {
+      window.ipc.GENERATE_STRUCTURE_GENERATOR({
         selectedGenerator: this.selectedGenerator,
       });
     },
@@ -92,21 +92,25 @@ export default {
   mounted() {},
   created() {
     //on first time
-    window.ipc.send("GET_GENERATOR", this.$route.params.name);
+    window.ipc.GET_GENERATOR(this.$route.params.name).then((payload) => {
+      this.isLoading = false;
+      this.UPDATE_SELECTED_GENERATOR(payload.content);
+    });
+
     //on change params
     this.$watch(
       () => this.$route.params,
       (toParams, previousParams) => {
         this.isLoading = true;
-        window.ipc.send("GET_GENERATOR", toParams.name);
+        window.ipc.GET_GENERATOR(toParams.name).then((payload) => {
+          this.isLoading = false;
+          this.UPDATE_SELECTED_GENERATOR(payload.content);
+        });
+
         this.UPDATE_SELECTED_DATA({});
         this.UPDATE_SELECTED_TEMPLATE({});
       }
     );
-    window.ipc.on("GET_GENERATOR", (payload) => {
-      this.isLoading = false;
-      this.UPDATE_SELECTED_GENERATOR(payload.content);
-    });
   },
 };
 </script>

@@ -130,7 +130,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["SHOW_MESSAGE_BOX_ERROR"]),
+    ...mapActions(["SHOW_MESSAGE_BOX_ERROR", "UPDATE_GENERATORS_DATA"]),
     isValidName(name) {
       if (this.generatorList.find((s) => s.name === name)) {
         this.SHOW_MESSAGE_BOX_ERROR("Amigo... no se puede repetir el nombre.");
@@ -146,28 +146,34 @@ export default {
           "Amigo... ¡Ya existe uno que se llama así!."
         );
       } else {
-        window.ipc.send("UPDATE_GENERATOR", item);
+        window.ipc.UPDATE_GENERATOR(item);
       }
     },
     deleteGenerator(item) {
-      window.ipc.send("DELETE_GENERATOR", item.id);
+      window.ipc.DELETE_GENERATOR(item.id).then((payload) => {
+        this.UPDATE_GENERATORS_DATA(payload);
+      });
     },
     createNewGenerator() {
       if (this.isValidName(this.newGeneratorName)) {
-        window.ipc.send("ADD_GENERATOR", {
-          id: new Date().valueOf(),
-          name: this.newGeneratorName,
-          dirToCreateStructure: "",
-          categories: [],
-          templatesList: [
-            {
-              id: "base",
-              name: "base-dir",
-              children: [],
-            },
-          ],
-          templateDefinitions: {},
-        });
+        window.ipc
+          .ADD_GENERATOR({
+            id: new Date().valueOf(),
+            name: this.newGeneratorName,
+            dirToCreateStructure: "",
+            categories: [],
+            templatesList: [
+              {
+                id: "base",
+                name: "base-dir",
+                children: [],
+              },
+            ],
+            templateDefinitions: {},
+          })
+          .then((payload) => {
+            this.UPDATE_GENERATORS_DATA(payload);
+          });
       }
     },
   },

@@ -72,12 +72,21 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["UPDATE_USER_DATA","SHOW_MESSAGE_BOX_SUCCESS"]),
+    ...mapActions(["UPDATE_USER_DATA", "SHOW_MESSAGE_BOX_SUCCESS"]),
     saveUserData() {
-      window.ipc.send("SAVE_USER_DATA", this.formData);
+      window.ipc
+        .SAVE_USER_DATA({ ...this.formData })
+        .then((payload) => this.UPDATE_USER_DATA(payload))
+        .then(() =>
+          this.SHOW_MESSAGE_BOX_SUCCESS(
+            "los datos se han guardado correctamente :)"
+          )
+        );
     },
     toggleMarker() {
-      window.ipc.send("SELECT_DIRECTORY");
+      window.ipc.SELECT_DIRECTORY().then((payload) => {
+        this.formData.urlDirectorioDeTrabajo = payload.selected_dir;
+      });
     },
     changeIcon() {
       this.iconIndex === this.icons.length - 1
@@ -87,18 +96,6 @@ export default {
   },
   mounted() {
     this.formData = this.userData || {};
-    console.log(window.ipc)
-    window.ipc.SELECT_DIRECTORY('jolin').then(result => {
-      console.log(result)
-    })
-    window.ipc.on("SELECT_DIRECTORY", (payload) => {
-      this.formData.urlDirectorioDeTrabajo = payload.selected_dir;
-    });
-    window.ipc.on("SAVE_USER_DATA", (payload) => {
-      this.UPDATE_USER_DATA(payload.content).then(() =>
-        this.SHOW_MESSAGE_BOX_SUCCESS("los datos se han guardado correctamente :)")
-      );
-    });
   },
 };
 </script>

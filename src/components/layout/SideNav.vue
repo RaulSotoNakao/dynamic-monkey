@@ -84,7 +84,6 @@ export default {
         },
       ],
       mini: true,
-      generatorList: [],
       icons: [
         "mdi-shield-bug",
         "mdi-shield-car",
@@ -110,38 +109,30 @@ export default {
     ...mapActions(["UPDATE_USER_DATA", "UPDATE_GENERATORS_DATA"]),
   },
   computed: {
-    ...mapGetters(["userData"]),
+    ...mapGetters(["userData", "generatorsData"]),
     userName() {
       return this.userData && this.userData.userName
         ? ` ${this.userData.userName}`
         : "";
     },
+    generatorList() {
+      return this.generatorsData.map((generator) => ({
+        route: {
+          name: "generator-view",
+          params: { name: generator.definition.name },
+        },
+        icon: this.icons[randomIntFromInterval(0, this.icons.length - 1)],
+        ...generator.definition,
+      }));
+    },
   },
   mounted() {
-    window.ipc.send("USER_DATA");
-    window.ipc.send("GENERATOR_LIST");
-
-    window.ipc.on("USER_DATA", (payload) => {
-      if (payload && payload.content) {
-        this.UPDATE_USER_DATA(payload.content.userData);
-      }
+    window.ipc.GET_USER_DATA().then((payload) => {
+      this.UPDATE_USER_DATA(payload);
     });
-    window.ipc.on("GENERATOR_LIST", (payload) => {
-      const internalGeneratorList = payload.content;
-      this.UPDATE_GENERATORS_DATA(internalGeneratorList)
-        .then(() =>
-          internalGeneratorList.map((generator) => ({
-            route: {
-              name: "generator-view",
-              params: { name: generator.definition.name },
-            },
-            icon: this.icons[randomIntFromInterval(0, this.icons.length - 1)],
-            ...generator.definition,
-          }))
-        )
-        .then((parsedGeneratorList) => {
-          this.generatorList = parsedGeneratorList;
-        });
+
+    window.ipc.GENERATOR_LIST().then((payload) => {
+      this.UPDATE_GENERATORS_DATA(payload);
     });
   },
 };

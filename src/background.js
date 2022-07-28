@@ -11,100 +11,14 @@ import {
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import { dynamicImportElectronaApi } from "./electronApi/electronApiNext";
-import {
-  getAllGeneratorData,
-  addNewGenerator,
-  updateGenerator,
-  deleteGenerator,
-  getGeneratorByName,
-  generateStructureGenerator,
-} from "./utils/generatorService";
 const isDevelopment = process.env.NODE_ENV !== "production";
 const Store = require("electron-store");
 import path from "path";
 const store = new Store();
-console.log(__dirname)
 
+// MY API ;)
+dynamicImportElectronaApi(ipcMain);
 
-dynamicImportElectronaApi(ipcMain)
-
-ipcMain.on("GENERATE_STRUCTURE_GENERATOR", (event, payload) => {
-  generateStructureGenerator(payload)
-    .then(() => event.reply("GENERATE_STRUCTURE_GENERATOR", true))
-    .catch(() => event.reply("GENERATE_STRUCTURE_GENERATOR", false));
-});
-
-ipcMain.on("SELECT_DIRECTORY", (event) => {
-  dialog
-    .showOpenDialog({
-      properties: ["openDirectory"],
-    })
-    .then((result) => {
-      if (!result.canceled) {
-        event.reply("SELECT_DIRECTORY", { selected_dir: result.filePaths[0] });
-      }
-    });
-});
-
-ipcMain.on("READ_FILE", (event, payload) => {
-  const formats = clipboard.availableFormats();
-  console.log(formats);
-
-  event.reply("READ_FILE", { content: store.get("unicorn") });
-});
-
-ipcMain.on("SAVE_USER_DATA", (event, payload) => {
-  store.set("USER_DATA", { ...payload });
-  event.reply("SAVE_USER_DATA", { content: store.get("USER_DATA") });
-});
-ipcMain.on("USER_DATA", (event) => {
-  const userData = store.get("USER_DATA");
-  event.reply("USER_DATA", { content: { userData } });
-});
-
-// GENERATOR CRUD
-
-ipcMain.on("ADD_GENERATOR", (event, payload) => {
-  const userData = store.get("USER_DATA");
-  addNewGenerator(userData.urlDirectorioDeTrabajo, payload)
-    .then(() => getAllGeneratorData(userData.urlDirectorioDeTrabajo))
-    .then((generatorList) =>
-      event.reply("GENERATOR_LIST", { content: generatorList })
-    );
-});
-
-ipcMain.on("UPDATE_GENERATOR", (event, payload) => {
-  const userData = store.get("USER_DATA");
-  updateGenerator(userData.urlDirectorioDeTrabajo, payload)
-    .then(() => getAllGeneratorData(userData.urlDirectorioDeTrabajo))
-    .then((generatorList) =>
-      event.reply("GENERATOR_LIST", { content: generatorList })
-    );
-});
-
-ipcMain.on("DELETE_GENERATOR", (event, payload) => {
-  const userData = store.get("USER_DATA");
-  deleteGenerator(userData.urlDirectorioDeTrabajo, payload)
-    .then(() => getAllGeneratorData(userData.urlDirectorioDeTrabajo))
-    .then((generatorList) =>
-      event.reply("GENERATOR_LIST", { content: generatorList })
-    );
-});
-
-ipcMain.on("GET_GENERATOR", (event, payload) => {
-  const userData = store.get("USER_DATA");
-  getGeneratorByName(userData.urlDirectorioDeTrabajo, payload).then(
-    (selectedGenerator) =>
-      event.reply("GET_GENERATOR", { content: selectedGenerator })
-  );
-});
-
-ipcMain.on("GENERATOR_LIST", (event, payload) => {
-  const userData = store.get("USER_DATA");
-  getAllGeneratorData(userData.urlDirectorioDeTrabajo).then((generatorList) => {
-    event.reply("GENERATOR_LIST", { content: generatorList });
-  });
-});
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([

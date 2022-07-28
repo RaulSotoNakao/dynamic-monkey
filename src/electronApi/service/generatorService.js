@@ -161,6 +161,7 @@ const deleteGenerator = (urlDirectorioDeTrabajo, id) =>
       console.log(err);
     });
 
+
 export {
   getAllGeneratorData,
   addNewGenerator,
