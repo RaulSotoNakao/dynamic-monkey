@@ -1,56 +1,46 @@
 <template>
-  <v-container class="d-flex justify-center align-center mb-6">
-    <v-card
-      class="mx-auto"
-      color="blue-grey lighten-4"
-      elevation="10"
-      shaped
-      style="width: 100%"
-      :disabled="isLoading"
-      :loading="isLoading"
-    >
-      <v-card-title>
-        <v-row class="">
-          <v-col>
-            <v-icon large left> mdi-table-cog </v-icon>
-            <span class="text-h6 font-weight-light">Generador</span>
-          </v-col>
-          <v-col class="d-flex justify-end">
-            <v-btn
-              color="primary"
-              class="mx-2 text-sm-body-2"
-              @click="() => executeGenerator()"
-            >
-              Generar estructura
-              <v-icon right> mdi-eye </v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-card-title>
-      <v-row>
-        <v-col cols="4">
-          <v-col cols="12">
-            <data-generator />
-          </v-col>
-
-          <v-col cols="12">
-            <v-card color="secondary" dark>
-              <v-card-title class="text-h6"></v-card-title>
-              <folder-structure />
-            </v-card>
-          </v-col>
+  <v-card
+    class="mx-auto"
+    style="width: 100%"
+    :disabled="isLoading"
+    :loading="isLoading"
+  >
+    <v-card-title>
+      <v-row class="">
+        <v-col>
+          <v-icon large left> mdi-table-cog </v-icon>
+          <span class="text-h6 font-weight-light">Generador</span>
         </v-col>
-        <v-col cols="8">
-          <editor-generator></editor-generator>
+        <v-col class="d-flex justify-end">
+          <v-btn
+            color="primary"
+            class="mx-2 text-sm-body-2"
+            @click="() => executeGenerator()"
+          >
+            Generar estructura
+            <v-icon right> mdi-eye </v-icon>
+          </v-btn>
         </v-col>
       </v-row>
-      <v-divider></v-divider>
+    </v-card-title>
+    <v-row>
+      <v-col cols="4">
+        <v-col cols="12">
+          <data-generator />
+        </v-col>
 
-      <v-card-actions>
-        <v-row align="center" justify="center"> </v-row>
-      </v-card-actions>
-    </v-card>
-  </v-container>
+        <v-col cols="12">
+          <v-card color="secondary">
+            <v-card-title class="text-h6"></v-card-title>
+            <folder-structure />
+          </v-card>
+        </v-col>
+      </v-col>
+      <v-col cols="8">
+        <editor-generator></editor-generator>
+      </v-col>
+    </v-row>
+  </v-card>
 </template>
 
 <script>

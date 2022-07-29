@@ -1,10 +1,10 @@
 <template>
-  <v-card class="" color="secondary" dark>
+  <v-card class="" color="secondary">
     <v-card-title class="text-h6">
       Datos disponibles
       <v-menu :close-on-content-click="false" :nudge-width="200" offset-x>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn x-small icon color="primary" dark v-bind="attrs" v-on="on">
+          <v-btn x-small icon color="primary" v-bind="attrs" v-on="on">
             <v-icon> mdi-plus-box </v-icon>
           </v-btn>
         </template>
@@ -160,6 +160,8 @@
       <v-col cols="12">
         <v-chip-group active-class="primary--text" column>
           <v-chip
+            outlined
+            color="primary"
             v-for="(value, key) in this.selectedGenerator.templateDefinitions"
             :key="key"
           >
@@ -167,7 +169,6 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   icon
-                  color="primary"
                   :style="`width: 10rem`"
                   v-bind="attrs"
                   v-on="on"
@@ -178,8 +179,6 @@
                 <v-btn
                   x-small
                   icon
-                  color="white"
-                  dark
                   @click="() => deleteData(key)"
                 >
                   <v-icon> mdi-delete-forever </v-icon>
@@ -293,15 +292,15 @@ export default {
         const beforeDefinitions =
           this.selectedGenerator.templateDefinitions || {};
         const templateDefinitions = { ...beforeDefinitions, ...newData };
-      window.ipc
-        .UPDATE_GENERATOR({
-          ...this.selectedGenerator,
-          templateDefinitions,
-        })
-        .then(() => window.ipc.GET_GENERATOR(this.selectedGenerator.name))
-        .then((payload) => {
-          this.UPDATE_SELECTED_GENERATOR(payload.content);
-        });
+        window.ipc
+          .UPDATE_GENERATOR({
+            ...this.selectedGenerator,
+            templateDefinitions,
+          })
+          .then(() => window.ipc.GET_GENERATOR(this.selectedGenerator.name))
+          .then((payload) => {
+            this.UPDATE_SELECTED_GENERATOR(payload.content);
+          });
         this.newJsonData = "";
       } catch (error) {
         this.SHOW_MESSAGE_BOX_ERROR("Amigo... el formato json no es correcto.");

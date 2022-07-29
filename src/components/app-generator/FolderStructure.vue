@@ -25,7 +25,7 @@
         offset-x
       >
         <template v-slot:activator="{ on, attrs }">
-          <v-btn x-small icon color="primary" dark v-bind="attrs" v-on="on">
+          <v-btn x-small icon color="primary" v-bind="attrs" v-on="on">
             <v-icon> mdi-plus-box </v-icon>
           </v-btn>
         </template>
@@ -73,7 +73,7 @@
         offset-x
       >
         <template v-slot:activator="{ on, attrs }">
-          <v-btn x-small icon color="white" dark v-bind="attrs" v-on="on">
+          <v-btn x-small icon   v-bind="attrs" v-on="on">
             <v-icon> mdi-delete-forever </v-icon>
           </v-btn>
         </template>
