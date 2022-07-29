@@ -1,34 +1,27 @@
 <template>
-  <v-container class="d-flex justify-center align-center mb-6">
-    <v-card
-      class="mx-auto"
-      color="blue-grey lighten-4"
-      elevation="10"
-      shaped
-      style="width: 100%"
-    >
-      <v-card-title>
-        <v-icon large left> mdi-home-account </v-icon>
-        <span class="text-h6 font-weight-light">Area Personal</span>
-      </v-card-title>
-      <v-divider></v-divider>
+  <v-card class="mx-auto" style="width: 100%">
+    <v-card-title>
+      <v-icon large left> mdi-home-account </v-icon>
+      <span class="text-h6 font-weight-light">Area Personal</span>
+    </v-card-title>
 
-      <v-timeline dense>
-        <v-timeline-item color="secondary" fill-dot icon="mdi-account-details">
-          <user-form-data />
-        </v-timeline-item>
-        <v-timeline-item color="secondary" fill-dot icon="mdi-file-tree">
-          <generator-form></generator-form>
-        </v-timeline-item>
-      </v-timeline>
+    <v-timeline dense>
+      <v-timeline-item color="secondary" fill-dot>
+        <template v-slot:icon>
+          <v-icon>mdi-account-details</v-icon>
+        </template>
 
-      <v-divider></v-divider>
+        <user-form-data />
+      </v-timeline-item>
+      <v-timeline-item color="secondary" fill-dot>
+        <template v-slot:icon>
+          <v-icon>mdi-file-tree</v-icon>
+        </template>
 
-      <v-card-actions>
-        <v-row align="center" justify="center"> </v-row>
-      </v-card-actions>
-    </v-card>
-  </v-container>
+        <generator-form></generator-form>
+      </v-timeline-item>
+    </v-timeline>
+  </v-card>
 </template>
 
 <script>

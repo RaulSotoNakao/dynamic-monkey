@@ -1,11 +1,10 @@
 <template>
-  <v-snackbar v-model="snackbarActive" :color="messageBoxColor.background" :vertical="true">
+  <v-snackbar v-model="snackbarActive" outlined :vertical="true">
     {{ messageData }}
 
     <template v-slot:action="{ attrs }">
       <v-btn
         :color="messageBoxColor.button"
-        text
         v-bind="attrs"
         @click="CLOSE_MESSAGE_BOX"
       >

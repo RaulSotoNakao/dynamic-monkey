@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mr-10" color="secondary" dark>
+  <v-card class="mr-10" color="secondary">
     <v-card-title class="text-h6"> Datos del usuario </v-card-title>
     <v-row class="mx-3">
       <v-col cols="12" :xs="12" :sm="6" :md="6">

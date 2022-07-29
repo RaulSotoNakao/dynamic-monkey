@@ -24,7 +24,7 @@ const messageData = {
       state.messageData = text;
       state.isActive = true;
       state.messageBoxColor.background = "secondary";
-      state.messageBoxColor.button = "primary";
+      state.messageBoxColor.button = "success";
     },
     CLOSE_MESSAGE_BOX(state) {
       state.isActive = false;

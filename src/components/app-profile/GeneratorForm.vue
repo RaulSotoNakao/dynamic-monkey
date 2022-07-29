@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mr-10" color="secondary" dark>
+  <v-card class="mr-10" color="secondary">
     <v-card-title class="text-h6">
       <v-row>
         <v-col>Generadores </v-col>
@@ -64,23 +64,17 @@
           >
             <!-- eslint-disable-next-line -->
             <template v-slot:item.name="{ item }">
-              <v-chip dark>
-                <v-text-field
-                  label="Regular"
-                  placeholder="Placeholder"
-                  v-model="item.name"
-                ></v-text-field>
-              </v-chip>
+              <v-text-field
+                placeholder="Placeholder"
+                v-model="item.name"
+              ></v-text-field>
             </template>
             <!-- eslint-disable-next-line -->
             <template v-slot:item.dirToCreateStructure="{ item }">
-              <v-chip dark>
-                <v-text-field
-                  label="Regular"
-                  placeholder="Placeholder"
-                  v-model="item.dirToCreateStructure"
-                ></v-text-field>
-              </v-chip>
+              <v-text-field
+                placeholder="Placeholder"
+                v-model="item.dirToCreateStructure"
+              ></v-text-field>
             </template>
 
             <!-- eslint-disable-next-line -->
