@@ -31,7 +31,16 @@
         ></v-text-field>
       </v-col>
       <v-col class="d-flex justify-end">
-        <v-btn color="primary" class="mx-2" @click="() => saveUserData()">
+        <v-btn
+          color="primary"
+          :disabled="
+            !formData.urlDirectorioDeTrabajo ||
+            !formData.urlDirectorioDeTrabajo ||
+            !formData.lastName
+          "
+          class="mx-2"
+          @click="() => saveUserData()"
+        >
           Guardar
           <v-icon right> mdi-content-save </v-icon>
         </v-btn>

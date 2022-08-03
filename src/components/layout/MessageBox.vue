@@ -1,5 +1,10 @@
 <template>
-  <v-snackbar v-model="snackbarActive" outlined :vertical="true">
+  <v-snackbar
+    v-model="snackbarActive"
+    outlined
+    :color="messageBoxColor.background"
+    :vertical="true"
+  >
     {{ messageData }}
 
     <template v-slot:action="{ attrs }">

@@ -18,12 +18,12 @@ const messageData = {
       state.messageData = text;
       state.isActive = true;
       state.messageBoxColor.background = "primary";
-      state.messageBoxColor.button = "secondary";
+      state.messageBoxColor.button = "error";
     },
     SHOW_MESSAGE_BOX_SUCCESS(state, text) {
       state.messageData = text;
       state.isActive = true;
-      state.messageBoxColor.background = "secondary";
+      state.messageBoxColor.background = "primary";
       state.messageBoxColor.button = "success";
     },
     CLOSE_MESSAGE_BOX(state) {

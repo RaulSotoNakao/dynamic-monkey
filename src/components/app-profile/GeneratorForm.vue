@@ -27,7 +27,7 @@
                     <v-icon>mdi-plus-box </v-icon>
                   </v-btn>
                 </template>
-                <span>Crear nuevo snippet</span>
+                <span>Crear nuevo generador</span>
               </v-tooltip>
               <!-- <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
@@ -124,7 +124,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["SHOW_MESSAGE_BOX_ERROR", "UPDATE_GENERATORS_DATA"]),
+    ...mapActions([
+      "SHOW_MESSAGE_BOX_ERROR",
+      "UPDATE_GENERATORS_DATA",
+      "SHOW_MESSAGE_BOX_SUCCESS",
+    ]),
     isValidName(name) {
       if (this.generatorList.find((s) => s.name === name)) {
         this.SHOW_MESSAGE_BOX_ERROR("Amigo... no se puede repetir el nombre.");
@@ -140,13 +144,24 @@ export default {
           "Amigo... ¡Ya existe uno que se llama así!."
         );
       } else {
-        window.ipc.UPDATE_GENERATOR(item);
+        window.ipc
+          .UPDATE_GENERATOR(item)
+          .then(() =>
+            this.SHOW_MESSAGE_BOX_SUCCESS(
+              "El generador se ha acuatlizado con exito"
+            )
+          );
       }
     },
     deleteGenerator(item) {
-      window.ipc.DELETE_GENERATOR(item.id).then((payload) => {
-        this.UPDATE_GENERATORS_DATA(payload);
-      });
+      window.ipc
+        .DELETE_GENERATOR(item.id)
+        .then((payload) => {
+          this.UPDATE_GENERATORS_DATA(payload);
+        })
+        .then(() =>
+          this.SHOW_MESSAGE_BOX_SUCCESS("El generador se ha borrado con exito")
+        );
     },
     createNewGenerator() {
       if (this.isValidName(this.newGeneratorName)) {
@@ -167,7 +182,10 @@ export default {
           })
           .then((payload) => {
             this.UPDATE_GENERATORS_DATA(payload);
-          });
+          })
+          .then(() =>
+            this.SHOW_MESSAGE_BOX_SUCCESS("Se ha creado el generador con exito")
+          );
       }
     },
   },
