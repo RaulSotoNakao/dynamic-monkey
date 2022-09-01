@@ -1,7 +1,7 @@
 <template>
   <v-row v-show="selectedTemplate.name">
     <v-col cols="12">
-      <v-card class="mr-4" color="secondary" >
+      <v-card color="secondary">
         <v-card-title class="text-h6">{{
           selectedTemplate.name + "." + selectedTemplate.file
         }}</v-card-title>

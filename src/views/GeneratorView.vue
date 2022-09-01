@@ -1,7 +1,6 @@
 <template>
   <v-card
-    class="mx-auto"
-    style="width: 100%"
+    style="width: 100%; height: 100%"
     :disabled="isLoading"
     :loading="isLoading"
   >
@@ -24,20 +23,19 @@
       </v-row>
     </v-card-title>
     <v-row>
-      <v-col cols="4">
-        <v-col cols="12">
-          <data-generator />
-        </v-col>
-
-        <v-col cols="12">
-          <v-card color="secondary">
-            <v-card-title class="text-h6"></v-card-title>
-            <folder-structure />
-          </v-card>
-        </v-col>
-      </v-col>
-      <v-col cols="8">
-        <editor-generator></editor-generator>
+      <v-col :sm="12" class="px-10"> <data-generator /> </v-col>
+      <v-col :sm="12" class="px-10">
+        <v-row>
+          <v-col :sm="12" :md="4">
+            <v-card color="secondary">
+              <v-card-title class="text-h6"></v-card-title>
+              <folder-structure />
+            </v-card>
+          </v-col>
+          <v-col :sm="12" :md="8">
+            <editor-generator></editor-generator>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-card>
@@ -56,13 +54,7 @@ export default {
     DataGenerator,
   },
   data: () => ({
-    selectedAction: "",
-    newObjectData: { key: "", value: "" },
-    newListData: { key: "", list: [] },
-    newJsonData: "",
-    templateDefinitions: {},
     isLoading: true,
-    activeFile: {},
   }),
   computed: {
     ...mapGetters(["selectedGenerator"]),

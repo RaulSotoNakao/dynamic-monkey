@@ -4,6 +4,7 @@
 
 const endpointsMerge = {
   ...require("./controllers/generatorController"),
+  ...require("./controllers/mysqlController"),
   ...require("./service/actions"),
   ...require("./service/electronStoreService"),
 };

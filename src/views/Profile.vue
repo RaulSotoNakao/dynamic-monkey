@@ -20,18 +20,27 @@
 
         <generator-form></generator-form>
       </v-timeline-item>
+      <v-timeline-item color="secondary" fill-dot>
+        <template v-slot:icon>
+          <v-icon>mdi-database-arrow-left </v-icon>
+        </template>
+
+        <mysql-form></mysql-form>
+      </v-timeline-item>
     </v-timeline>
   </v-card>
 </template>
 
 <script>
 import GeneratorForm from "../components/app-profile/GeneratorForm.vue";
+import MysqlForm from "../components/app-profile/MysqlForm.vue";
 import UserFormData from "../components/app-profile/UserFormData.vue";
 
 export default {
   components: {
     "user-form-data": UserFormData,
     "generator-form": GeneratorForm,
+    "mysql-form": MysqlForm,
   },
   data: () => ({}),
   computed: {},
