@@ -66,38 +66,23 @@
           </v-list-item-content>
         </v-card>
       </v-menu>
-      <v-menu
+      <delete-button
         v-if="item.id !== 'base'"
-        :close-on-content-click="false"
-        :nudge-width="200"
-        offset-x
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn x-small icon   v-bind="attrs" v-on="on">
-            <v-icon> mdi-delete-forever </v-icon>
-          </v-btn>
-        </template>
-
-        <v-card>
-          <v-list-item-content class="mx-2">
-            <v-list-item-subtitle>¿Estas seguro? </v-list-item-subtitle>
-          </v-list-item-content>
-          <v-card-actions>
-            <v-btn color="blue-grey lighten-4" @click="() => deleteItem(item)"
-              >Si</v-btn
-            >
-          </v-card-actions>
-        </v-card>
-      </v-menu>
+        @deleteItem="() => deleteItem(item)"
+      ></delete-button>
     </template>
   </v-treeview>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import DeleteButton from "../../common/Buttons/DeleteButton.vue";
 
 export default {
   props: {},
+  components: {
+    "delete-button": DeleteButton,
+  },
   computed: {
     ...mapGetters(["selectedGenerator"]),
   },

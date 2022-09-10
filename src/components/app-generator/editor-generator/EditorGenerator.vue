@@ -2,9 +2,38 @@
   <v-row v-show="selectedTemplate.name">
     <v-col cols="12">
       <v-card color="secondary">
-        <v-card-title class="text-h6">{{
-          selectedTemplate.name + "." + selectedTemplate.file
-        }}</v-card-title>
+        <v-card-title class="text-h6">
+          <v-row>
+            <v-col :cols="12" :md="4">
+              {{ selectedTemplate.name + "." + selectedTemplate.file }}</v-col
+            >
+            <v-col class="d-flex justify-end mt-2" :md="8">
+              <v-btn
+                v-if="!render.active"
+                color="info"
+                class="mx-2"
+                @click="() => renderTemplate()"
+              >
+                renderizado
+                <v-icon right> mdi-eye </v-icon>
+              </v-btn>
+              <v-btn
+                v-if="render.active"
+                color="info"
+                class="mx-2"
+                @click="() => (render.active = false)"
+              >
+                mostrar template
+                <v-icon right> mdi-eye </v-icon>
+              </v-btn>
+
+              <v-btn color="primary" class="mx-2" @click="() => saveTemplate()">
+                Guardar template
+                <v-icon right> mdi-content-save </v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-title>
 
         <v-container>
           <v-row v-show="!!selectedLabel">
@@ -19,7 +48,7 @@
                 {{
                   selectedLabel +
                   " -> " +
-                  JSON.stringify(this.selectedData[selectedLabel])
+                  JSON.stringify(this.selectedData[selectedLabel], null, 4)
                 }}
               </v-banner>
             </v-col>
@@ -65,33 +94,6 @@
             {{ this.template }}
           </v-sheet> -->
         </v-container>
-        <v-row>
-          <v-col class="d-flex justify-end mt-2">
-            <v-btn
-              v-if="!render.active"
-              color="info"
-              class="mx-2"
-              @click="() => renderTemplate()"
-            >
-              renderizado
-              <v-icon right> mdi-eye </v-icon>
-            </v-btn>
-            <v-btn
-              v-if="render.active"
-              color="info"
-              class="mx-2"
-              @click="() => (render.active = false)"
-            >
-              mostrar template
-              <v-icon right> mdi-eye </v-icon>
-            </v-btn>
-
-            <v-btn color="primary" class="mx-2" @click="() => saveTemplate()">
-              Guardar template
-              <v-icon right> mdi-content-save </v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
       </v-card>
     </v-col>
   </v-row>

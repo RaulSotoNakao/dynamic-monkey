@@ -23,35 +23,51 @@
       </v-row>
     </v-card-title>
     <v-row>
-      <v-col :sm="12" class="px-10"> <data-generator /> </v-col>
-      <v-col :sm="12" class="px-10">
+      <v-col
+        :sm="12"
+        md="4"
+        :class="`${
+          ['sm', 'xs'].includes($vuetify.breakpoint.name) ? 'px-10' : 'pl-10'
+        }`"
+      >
         <v-row>
-          <v-col :sm="12" :md="4">
+          <v-col :cols="12">
             <v-card color="secondary">
               <v-card-title class="text-h6"></v-card-title>
               <folder-structure />
             </v-card>
           </v-col>
-          <v-col :sm="12" :md="8">
-            <editor-generator></editor-generator>
+          <v-col :cols="12">
+            <v-card color="secondary">
+              <data-structure />
+            </v-card>
           </v-col>
         </v-row>
+      </v-col>
+      <v-col
+        :sm="12"
+        md="8"
+        :class="`${
+          ['sm', 'xs'].includes($vuetify.breakpoint.name) ? 'px-10' : 'pr-10'
+        }`"
+      >
+        <editor-generator></editor-generator>
       </v-col>
     </v-row>
   </v-card>
 </template>
 
 <script>
-import FolderStructure from "../components/app-generator/FolderStructure.vue";
-import EditorGenerator from "../components/app-generator/EditorGenerator.vue";
-import DataGenerator from "../components/app-generator/dataGenerator.vue";
+import FolderStructure from "../components/app-generator/folder-generator/FolderStructure.vue";
+import EditorGenerator from "../components/app-generator/editor-generator/EditorGenerator.vue";
 import { mapActions, mapGetters } from "vuex";
+import DataStructure from "../components/app-generator/data-generator/DataStructure.vue";
 
 export default {
   components: {
     "folder-structure": FolderStructure,
     "editor-generator": EditorGenerator,
-    DataGenerator,
+    "data-structure": DataStructure,
   },
   data: () => ({
     isLoading: true,

@@ -1,22 +1,26 @@
 <template>
-  <v-card flat>
-    <v-row class="mx-2 my-2 secondary rounded-lg">
-      <v-col>
-        <v-textarea
-          label="JSON DATA"
-          append-outer-icon="mdi-plus-circle"
-          v-model="newJsonData"
-          @click:append-outer="addNewJsonData()"
-        ></v-textarea>
-      </v-col>
-    </v-row>
-  </v-card>
+  <v-row class="mx-2 my-2 secondary rounded-lg">
+    <v-col :cols="12">
+      <v-textarea label="JSON DATA" v-model="newJsonData" :auto-grow="true" />
+    </v-col>
+    <v-col :cols="12">
+      <v-row align="start" justify="end" class="ma-1">
+        <v-btn @click="addNewJsonData" color="primary"> guardar json </v-btn>
+      </v-row>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 
 export default {
+  props: {
+    parentData: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {
       newJsonData: "",
@@ -25,7 +29,13 @@ export default {
   computed: {
     ...mapGetters(["selectedGenerator"]),
   },
-
+  mounted() {
+    this.newJsonData = JSON.stringify(
+      this.selectedGenerator.templateDefinitions,
+      null,
+      4
+    );
+  },
   methods: {
     ...mapActions([
       "SHOW_MESSAGE_BOX_ERROR",
@@ -36,9 +46,7 @@ export default {
     addNewJsonData() {
       try {
         const newData = JSON.parse(this.newJsonData);
-        const beforeDefinitions =
-          this.selectedGenerator.templateDefinitions || {};
-        const templateDefinitions = { ...beforeDefinitions, ...newData };
+        const templateDefinitions = { ...newData };
         window.ipc
           .UPDATE_GENERATOR({
             ...this.selectedGenerator,
@@ -53,7 +61,6 @@ export default {
               "se ha añadido el dato json correctamente"
             )
           );
-        this.newJsonData = "";
       } catch (error) {
         this.SHOW_MESSAGE_BOX_ERROR("Amigo... el formato json no es correcto.");
       }
