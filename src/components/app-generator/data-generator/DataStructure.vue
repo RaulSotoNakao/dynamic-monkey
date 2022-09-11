@@ -16,13 +16,8 @@
         <v-list-item-content @click="() => handleSelectedData(item.name)">
           <v-list-item-title v-text="item.name"></v-list-item-title>
         </v-list-item-content>
-        <default-button
-          labelHover="Editar datos!"
-          :colorButton="''"
-          mdiIcon="mdi-pencil "
-          @clickButton="() => {}"
-          size="x-small"
-        />
+
+        <menu-update-data :dataToUpdate="item.value" />
 
         <delete-button
           @deleteItem="() => deleteData(item.name)"
@@ -39,6 +34,7 @@ import DefaultButton from "../../common/Buttons/DefaultButton.vue";
 import ModalJsonForm from "./ModalJsonForm";
 import ModalGenerator from "./modalGenerator.vue";
 import MenuAddData from "./MenuAddData.vue";
+import MenuUpdateData from "./menuUpdateData.vue";
 export default {
   components: {
     "delete-button": DeleteButton,
@@ -46,6 +42,7 @@ export default {
     "modal-json-form": ModalJsonForm,
     "modal-generator": ModalGenerator,
     MenuAddData,
+    MenuUpdateData,
   },
   props: {},
   data: () => ({
@@ -68,8 +65,11 @@ export default {
             this.selectedGenerator.templateDefinitions[name]
           );
 
+          const value = {};
+          value[name] = structuredClone(this.selectedGenerator.templateDefinitions[name]);
+
           const dataType = isArray ? "list" : "Object";
-          return { name, icon: this.dataIcons[dataType] };
+          return { name, icon: this.dataIcons[dataType], value };
         });
         return parsedList;
       } else {

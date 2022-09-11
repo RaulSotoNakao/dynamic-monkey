@@ -28,6 +28,12 @@
 import { mapActions, mapGetters } from "vuex";
 
 export default {
+  props: {
+    objectToEdit: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       newObjectData: { key: "", value: "" },
@@ -35,6 +41,18 @@ export default {
   },
   computed: {
     ...mapGetters(["selectedGenerator"]),
+  },
+  watch: {
+    objectToEdit: {
+      handler(value) {
+        if (value && Object.values(value).length > 0) {
+          const keyValue = Object.entries(value)[0];
+          this.newObjectData = { key: keyValue[0], value: keyValue[1] };
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
   },
 
   methods: {

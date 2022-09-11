@@ -80,6 +80,13 @@
 import { mapActions, mapGetters } from "vuex";
 
 export default {
+  props: {
+    listToEdit: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+
   data() {
     return {
       newHeader: "",
@@ -89,6 +96,27 @@ export default {
   },
   computed: {
     ...mapGetters(["selectedGenerator"]),
+  },
+  watch: {
+    listToEdit: {
+      handler(value) {
+        if (value && Object.values(value).length > 0) {
+          const keyValue = Object.entries(value)[0];
+          const colNameFirstRow = Object.keys(keyValue[1][0]);
+
+          this.newListData.key = keyValue[0];
+          this.newListData.list = keyValue[1];
+          colNameFirstRow.map((colname) => {
+            this.newHeader = colname;
+            this.addNewHeader();
+
+            this.newHeader = "";
+          });
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
   },
 
   methods: {
