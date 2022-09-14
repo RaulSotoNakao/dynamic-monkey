@@ -54,7 +54,7 @@
       Bienvenido, ¡Aquí puedes administrar y crear Generadores!
     </v-card-text>
 
-    <v-row class="d-flex justify-center align-center mb-6">
+    <v-row class="d-flex justify-center align-center">
       <v-col class="mx-4">
         <v-card>
           <v-data-table

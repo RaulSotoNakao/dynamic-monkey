@@ -13,6 +13,15 @@
       <v-col cols="12" :sm="6" :md="3">
         <v-text-field label="database" v-model="mysql.database" />
       </v-col>
+      <v-col cols="12">
+        <v-combobox
+          v-model="select"
+          :items="userData.queries"
+          label="Select a query saved"
+          clearable
+          :item-text="(e) => e.queryName"
+        ></v-combobox>
+      </v-col>
     </v-row>
     <v-row class="mx-2 my-2 secondary rounded-lg">
       <v-col>
@@ -42,6 +51,7 @@ export default {
         database: "",
       },
       queryToExecute: "",
+      select: "",
     };
   },
   computed: {
@@ -67,11 +77,10 @@ export default {
         .then(() => this.SHOW_MESSAGE_BOX_SUCCESS("Query ejecutada"))
         .catch((err) => {
           console.log(err);
-          const errorMessage = `Amigo... La query ha fallado \n\r ${err}`
+          const errorMessage = `Amigo... La query ha fallado \n\r ${err}`;
           this.SHOW_MESSAGE_BOX_ERROR(errorMessage);
         })
-        .finally(() => {
-        });
+        .finally(() => {});
     },
   },
   mounted() {
