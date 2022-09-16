@@ -33,15 +33,33 @@
         ></v-textarea>
       </v-col>
     </v-row>
+    <v-row class="mx-2 my-2 secondary rounded-lg">
+      <v-col>
+        <ag-grid-vue
+          :style="`height: ${(rowData.length || 1) * 60}px`"
+          class="ag-theme-alpine"
+          :columnDefs="columnDefs"
+          :rowData="rowData"
+          :defaultColDef="defaultColDef"
+                          :rowDragManaged="true"
+                :suppressMoveWhenRowDragging="true"
+                :animateRows="true"
+
+        ></ag-grid-vue>
+      </v-col>
+    </v-row>
   </v-card>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import MysqlForm from "../../app-profile/MysqlForm.vue";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
+import { AgGridVue } from "ag-grid-vue";
 
 export default {
-  components: { MysqlForm },
+  components: { MysqlForm, AgGridVue },
   data() {
     return {
       mysql: {
@@ -52,12 +70,30 @@ export default {
       },
       queryToExecute: "",
       select: "",
+      columnDefs: null,
+      rowData: null,
+      defaultColDef: {
+        editable: true,
+        resizable: true,
+      },
     };
   },
   computed: {
     ...mapGetters(["userData"]),
   },
+  beforeMount() {
+    this.columnDefs = [
+      { rowDrag: true, field: "make" },
+      { field: "model" },
+      { field: "price" },
+    ];
 
+    this.rowData = [
+      { make: "Toyota", model: "Celica", price: 35000 },
+      { make: "Ford", model: "Mondeo", price: 32000 },
+      { make: "Porsche", model: "Boxster", price: 72000 },
+    ];
+  },
   methods: {
     ...mapActions([
       "SHOW_MESSAGE_BOX_ERROR",
@@ -90,3 +126,28 @@ export default {
   },
 };
 </script>
+<style>
+.ag-theme-alpine {
+  --ag-foreground-color: rgba(0, 0, 0, 0.6);
+  --ag-background-color: #cfd8dc;
+  --ag-header-foreground-color: rgba(0, 0, 0, 0.6);
+  --ag-header-background-color: #cfd8dc;
+  --ag-odd-row-background-color: rgb(0, 0, 0, 0.03);
+  --ag-header-column-resize-handle-color: rgba(0, 0, 0, 0.6);
+
+  --ag-font-size: 14px;
+  --ag-font-family: Roboto, sans-serif;
+  --ag-header-cell-hover-background-color: #26a69a;
+  --ag-header-cell-moving-background-color: #cfd8dc;
+}
+.ag-theme-alpine .ag-header {
+  font-family: Roboto, sans-serif;
+}
+.ag-theme-alpine .ag-header-group-cell {
+  font-weight: normal;
+  font-size: 15px;
+}
+.ag-theme-alpine .ag-header-cell {
+  font-size: 15px;
+}
+</style>
