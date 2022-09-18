@@ -1,76 +1,22 @@
 <template>
   <v-card flat>
-    <v-row class="d-flex justify-center align-center mx-2 my-2">
-      <v-col class="mx-2" cols="11">
-        <v-card>
-          <v-data-table
-            dense
-            class="secondary"
-            :headers="newListHeaders"
-            :items="newListData.list"
-          >
-            <template v-slot:top>
-              <v-row class="mx-2">
-                <v-col cols="6">
-                  <v-text-field
-                    :label="'nombre de la lista'"
-                    v-model="newListData.key"
-                    type="text"
-                    :color="'primary'"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="6">
-                  <v-text-field
-                    append-outer-icon="mdi-plus-circle"
-                    label="añadir nueva cabecera"
-                    type="text"
-                    v-model="newHeader"
-                    :disabled="!newListData.key"
-                    @click:append-outer="addNewHeader()"
-                    :color="'primary'"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="6">
-                  <v-btn
-                    class=""
-                    small
-                    color="primary"
-                    @click="addNewTableRegistry"
-                  >
-                    añadir nuevo registro
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </template>
-            <!-- eslint-disable-next-line -->
-            <template v-slot:body="{ items }">
-              <tr v-for="(item, id) in items" :key="id">
-                <td v-for="header in newListHeaders" :key="header.value">
-                  <v-text-field
-                    class="ml-2 text-caption"
-                    v-if="header.value !== 'actions'"
-                    placeholder="Placeholder"
-                    v-model="item[header.value]"
-                  ></v-text-field>
-                  <div v-else class="d-flex justify-center">
-                    <v-icon small @click="deleteListItem(id)">
-                      mdi-delete
-                    </v-icon>
-                  </div>
-                </td>
-              </tr>
-            </template>
-          </v-data-table>
-        </v-card>
+    <v-row class="mx-2 my-2 secondary rounded-lg">
+      <v-col cols="12">
+        <v-text-field
+          :label="'nombre de la query'"
+          v-model="newListData.key"
+          type="text"
+          :color="'primary'"
+        ></v-text-field>
       </v-col>
-      <v-col class="mx-2" cols="6">
-        <v-btn class="mx-2" small color="secondary" @click="newList">
-          nueva lista
-        </v-btn>
 
-        <v-btn class="" small color="primary" @click="saveList">
-          guardar lista
-        </v-btn>
+      <v-col>
+        <editable-table
+          :columnDefs="newListHeaders"
+          :rowData.sync="newListData.list"
+          @saveTable="saveList"
+          :saveDisabled="!newListData.key"
+        ></editable-table>
       </v-col>
     </v-row>
   </v-card>
@@ -78,8 +24,12 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import EditableTable from "../../layout/EditableTable.vue";
 
 export default {
+  components: {
+    "editable-table": EditableTable,
+  },
   props: {
     listToEdit: {
       type: Object,
@@ -106,12 +56,10 @@ export default {
 
           this.newListData.key = keyValue[0];
           this.newListData.list = keyValue[1];
-          colNameFirstRow.map((colname) => {
-            this.newHeader = colname;
-            this.addNewHeader();
 
-            this.newHeader = "";
-          });
+          this.newListHeaders = colNameFirstRow.map((column) => ({
+            field: column,
+          }));
         }
       },
       deep: true,
@@ -161,9 +109,9 @@ export default {
       }, {});
       this.newListData.list = [...this.newListData.list, newRegistry];
     },
-    saveList() {
+    saveList(list) {
       const newData = {};
-      newData[this.newListData.key] = this.newListData.list;
+      newData[this.newListData.key] = list;
       const beforeDefinitions =
         this.selectedGenerator.templateDefinitions || {};
       const templateDefinitions = { ...beforeDefinitions, ...newData };

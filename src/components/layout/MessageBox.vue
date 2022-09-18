@@ -4,6 +4,7 @@
     outlined
     :color="messageBoxColor.background"
     :vertical="true"
+    timeout="4000"
   >
     {{ messageData }}
 

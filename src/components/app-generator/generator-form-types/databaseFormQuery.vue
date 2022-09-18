@@ -20,6 +20,7 @@
           label="Select a query saved"
           clearable
           :item-text="(e) => e.queryName"
+          @change="(list) => list && setQuery(list.querySql)"
         ></v-combobox>
       </v-col>
     </v-row>
@@ -34,18 +35,22 @@
       </v-col>
     </v-row>
     <v-row class="mx-2 my-2 secondary rounded-lg">
-      <v-col>
-        <ag-grid-vue
-          :style="`height: ${(rowData.length || 1) * 60}px`"
-          class="ag-theme-alpine"
-          :columnDefs="columnDefs"
-          :rowData="rowData"
-          :defaultColDef="defaultColDef"
-                          :rowDragManaged="true"
-                :suppressMoveWhenRowDragging="true"
-                :animateRows="true"
+      <v-col cols="12">
+        <v-text-field
+          :label="'nombre de la query'"
+          v-model="newListData.key"
+          type="text"
+          :color="'primary'"
+        ></v-text-field>
+      </v-col>
 
-        ></ag-grid-vue>
+      <v-col>
+        <editable-table
+          :columnDefs="columnDef"
+          :rowData.sync="newListData.list"
+          @saveTable="saveData"
+          :saveDisabled="!newListData.key"
+        ></editable-table>
       </v-col>
     </v-row>
   </v-card>
@@ -54,12 +59,9 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import MysqlForm from "../../app-profile/MysqlForm.vue";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
-import { AgGridVue } from "ag-grid-vue";
-
+import EditableTable from "../../layout/EditableTable.vue";
 export default {
-  components: { MysqlForm, AgGridVue },
+  components: { MysqlForm, "editable-table": EditableTable },
   data() {
     return {
       mysql: {
@@ -70,30 +72,14 @@ export default {
       },
       queryToExecute: "",
       select: "",
-      columnDefs: null,
-      rowData: null,
-      defaultColDef: {
-        editable: true,
-        resizable: true,
-      },
+      columnDef: [],
+      newListData: { key: "", list: [] },
     };
   },
   computed: {
-    ...mapGetters(["userData"]),
+    ...mapGetters(["userData", "selectedGenerator"]),
   },
-  beforeMount() {
-    this.columnDefs = [
-      { rowDrag: true, field: "make" },
-      { field: "model" },
-      { field: "price" },
-    ];
-
-    this.rowData = [
-      { make: "Toyota", model: "Celica", price: 35000 },
-      { make: "Ford", model: "Mondeo", price: 32000 },
-      { make: "Porsche", model: "Boxster", price: 72000 },
-    ];
-  },
+  beforeMount() {},
   methods: {
     ...mapActions([
       "SHOW_MESSAGE_BOX_ERROR",
@@ -101,6 +87,29 @@ export default {
       "UPDATE_SELECTED_DATA",
       "UPDATE_SELECTED_GENERATOR",
     ]),
+    setQuery(val) {
+      this.queryToExecute = val;
+    },
+    saveData(val) {
+      const newData = {};
+      newData[this.newListData.key] = val;
+      const beforeDefinitions =
+        this.selectedGenerator.templateDefinitions || {};
+      const templateDefinitions = { ...beforeDefinitions, ...newData };
+
+      window.ipc
+        .UPDATE_GENERATOR({
+          ...this.selectedGenerator,
+          templateDefinitions,
+        })
+        .then(() => window.ipc.GET_GENERATOR(this.selectedGenerator.name))
+        .then((payload) => {
+          this.UPDATE_SELECTED_GENERATOR(payload.content);
+        })
+        .then(() => {
+          this.SHOW_MESSAGE_BOX_SUCCESS("Lista guardada!");
+        });
+    },
     makeQuery() {
       window.ipc
         .EXECUTE_MYSQL_QUERY({
@@ -108,7 +117,8 @@ export default {
           dbConnection: this.mysql,
         })
         .then((res) => {
-          console.log(res);
+          this.columnDef = Object.keys(res[0]).map((key) => ({ field: key }));
+          this.newListData.list = res;
         })
         .then(() => this.SHOW_MESSAGE_BOX_SUCCESS("Query ejecutada"))
         .catch((err) => {
@@ -126,28 +136,3 @@ export default {
   },
 };
 </script>
-<style>
-.ag-theme-alpine {
-  --ag-foreground-color: rgba(0, 0, 0, 0.6);
-  --ag-background-color: #cfd8dc;
-  --ag-header-foreground-color: rgba(0, 0, 0, 0.6);
-  --ag-header-background-color: #cfd8dc;
-  --ag-odd-row-background-color: rgb(0, 0, 0, 0.03);
-  --ag-header-column-resize-handle-color: rgba(0, 0, 0, 0.6);
-
-  --ag-font-size: 14px;
-  --ag-font-family: Roboto, sans-serif;
-  --ag-header-cell-hover-background-color: #26a69a;
-  --ag-header-cell-moving-background-color: #cfd8dc;
-}
-.ag-theme-alpine .ag-header {
-  font-family: Roboto, sans-serif;
-}
-.ag-theme-alpine .ag-header-group-cell {
-  font-weight: normal;
-  font-size: 15px;
-}
-.ag-theme-alpine .ag-header-cell {
-  font-size: 15px;
-}
-</style>
