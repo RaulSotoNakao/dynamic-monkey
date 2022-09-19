@@ -39,8 +39,7 @@ export default {
 
   data() {
     return {
-      newHeader: "",
-      newListHeaders: [{ text: "Acciones", value: "actions", sortable: false }],
+      newListHeaders: [],
       newListData: { key: "", list: [] },
     };
   },
@@ -74,41 +73,6 @@ export default {
       "UPDATE_SELECTED_DATA",
       "UPDATE_SELECTED_GENERATOR",
     ]),
-    addNewHeader() {
-      if (this.newListHeaders.find((h) => h.value === this.newHeader)) {
-        this.SHOW_MESSAGE_BOX_ERROR(
-          "Amigo... no pueden existir 2 cabeceras iguales."
-        );
-        return "";
-      }
-
-      const oldHeadersWithoutActions = this.newListHeaders.filter(
-        (h) => h.value !== "actions"
-      );
-      const actionHeader = this.newListHeaders.filter(
-        (h) => h.value === "actions"
-      );
-
-      this.newListHeaders = [
-        ...oldHeadersWithoutActions,
-        {
-          text: this.newHeader,
-          align: "center",
-          value: this.newHeader,
-        },
-        ...actionHeader,
-      ];
-    },
-    addNewTableRegistry() {
-      const newRegistrye = this.newListHeaders
-        .filter((h) => h.value !== "actions")
-        .map((h) => h.value);
-      const newRegistry = newRegistrye.reduce((acc, key) => {
-        acc[key] = "";
-        return acc;
-      }, {});
-      this.newListData.list = [...this.newListData.list, newRegistry];
-    },
     saveList(list) {
       const newData = {};
       newData[this.newListData.key] = list;
@@ -129,19 +93,6 @@ export default {
         .then(() => {
           this.SHOW_MESSAGE_BOX_SUCCESS("Lista guardada!");
         });
-    },
-    newList() {
-      this.newListHeaders = [
-        { text: "Acciones", value: "actions", sortable: false },
-      ];
-      this.newListData = { key: "", list: [] };
-    },
-    deleteListItem(key) {
-      const list = this.newListData.list;
-      this.newListData.list = [
-        ...list.slice(0, key),
-        ...list.slice(key + 1, list.length),
-      ];
     },
   },
 };
