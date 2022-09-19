@@ -1,13 +1,15 @@
 <template>
   <v-list dense color="secondary">
-    <v-subheader class="header-container">
-      <div style="width: 11rem" class="text-h6">Datos disponibles</div>
+    <div class="ml-4 d-flex justify-space-between flex-wrap">
+      <div style="width: 11rem" class="text-h6" color="dark">
+        Datos disponibles
+      </div>
       <div class="mr-2 buttons-container">
         <modal-json-form></modal-json-form>
         <modal-generator></modal-generator>
         <menu-add-data></menu-add-data>
       </div>
-    </v-subheader>
+    </div>
     <v-list-item-group v-model="selectedItem" color="primary">
       <v-list-item v-for="(item, i) in templateDefinitionList" :key="i">
         <v-list-item-icon>
@@ -66,7 +68,9 @@ export default {
           );
 
           const value = {};
-          value[name] = structuredClone(this.selectedGenerator.templateDefinitions[name]);
+          value[name] = structuredClone(
+            this.selectedGenerator.templateDefinitions[name]
+          );
 
           const dataType = isArray ? "list" : "Object";
           return { name, icon: this.dataIcons[dataType], value };

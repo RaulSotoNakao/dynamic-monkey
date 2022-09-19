@@ -33,7 +33,10 @@
         <v-row>
           <v-col :cols="12">
             <v-card color="secondary">
-              <v-card-title class="text-h6"></v-card-title>
+              <v-card-title class="text-h6">
+                
+                
+                Estructura de ficheros</v-card-title>
               <folder-structure />
             </v-card>
           </v-col>
