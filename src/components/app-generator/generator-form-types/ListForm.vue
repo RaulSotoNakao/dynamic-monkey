@@ -94,6 +94,11 @@ export default {
           this.SHOW_MESSAGE_BOX_SUCCESS("Lista guardada!");
         });
     },
+    newList() {
+      this.newListHeaders= [];
+      this.newListData= { key: "", list: [] };
+
+    }
   },
 };
 </script>

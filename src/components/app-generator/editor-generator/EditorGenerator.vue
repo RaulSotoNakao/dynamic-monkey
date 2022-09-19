@@ -5,7 +5,7 @@
         <v-card-title class="text-h6">
           <v-row>
             <v-col :cols="12" :md="4">
-              {{ selectedTemplate.name + "." + selectedTemplate.file }}</v-col
+              {{ selectedTemplate.name  }}</v-col
             >
             <v-col class="d-flex justify-end mt-2" :md="8">
               <v-btn
@@ -39,7 +39,7 @@
           <v-row v-show="!!selectedLabel">
             <v-col cols="12">
               <v-banner
-                color="accent"
+                color="secondary"
                 elevation="12"
                 icon="mdi-database"
                 rounded
@@ -48,7 +48,7 @@
                 {{
                   selectedLabel +
                   " -> " +
-                  JSON.stringify(this.selectedData[selectedLabel], null, 4)
+                  JSON.stringify(parsedData)
                 }}
               </v-banner>
             </v-col>
@@ -118,6 +118,12 @@ export default {
       const keys = this.selectedData ? Object.keys(this.selectedData) : [];
       return keys.length ? `${keys[0]}` : "";
     },
+    parsedData() {
+      const keys = this.selectedData ? Object.values(this.selectedData) : [];
+      const label = Array.isArray(keys[0]) ? Object.keys(keys[0][0]) : keys[0]
+
+      return label
+    }
   },
   methods: {
     ...mapActions(["UPDATE_SELECTED_GENERATOR"]),
