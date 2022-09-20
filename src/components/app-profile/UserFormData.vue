@@ -28,13 +28,13 @@
           readonly
           color="black"
           class="url-workspace"
+          :key="`test-${urlUpdated}`"
         ></v-text-field>
       </v-col>
       <v-col class="d-flex justify-end">
         <v-btn
           color="primary"
           :disabled="
-            !formData.urlDirectorioDeTrabajo ||
             !formData.urlDirectorioDeTrabajo ||
             !formData.lastName
           "
@@ -70,6 +70,7 @@ export default {
       "mdi-emoticon-sad",
       "mdi-emoticon-tongue",
     ],
+    urlUpdated: 0
   }),
   computed: {
     ...mapGetters(["userData"]),
@@ -95,6 +96,7 @@ export default {
     toggleMarker() {
       window.ipc.SELECT_DIRECTORY().then((payload) => {
         this.formData.urlDirectorioDeTrabajo = payload.selected_dir;
+        this.urlUpdated ++;
       });
     },
     changeIcon() {

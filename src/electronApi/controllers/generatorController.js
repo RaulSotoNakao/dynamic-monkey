@@ -10,7 +10,7 @@ import {
 
 const GENERATOR_LIST = (event, payload) => {
   const userData = GET_USER_DATA();
-  return getAllGeneratorData(userData.urlDirectorioDeTrabajo);
+  return userData ? getAllGeneratorData(userData.urlDirectorioDeTrabajo) : Promise.resolve([]);
 };
 
 const GET_GENERATOR = (event, payload) => {
