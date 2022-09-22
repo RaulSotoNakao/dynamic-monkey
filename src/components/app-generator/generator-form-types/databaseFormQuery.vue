@@ -1,17 +1,20 @@
 <template>
   <v-card flat>
     <v-row class="mx-2 my-2 secondary rounded-lg">
-      <v-col cols="12" :sm="6" :md="3">
+      <v-col cols="12" :sm="6" :md="4">
         <v-text-field label="host" v-model="mysql.host" />
       </v-col>
-      <v-col cols="12" :sm="6" :md="3">
+      <v-col cols="12" :sm="6" :md="4">
+        <v-text-field label="port" v-model="mysql.port" />
+      </v-col>
+      <v-col cols="12" :sm="6" :md="4">
+        <v-text-field label="database" v-model="mysql.database" />
+      </v-col>
+      <v-col cols="12" :sm="6" >
         <v-text-field label="user" v-model="mysql.user" />
       </v-col>
-      <v-col cols="12" :sm="6" :md="3">
+      <v-col cols="12" :sm="6" >
         <v-text-field label="password" v-model="mysql.password" />
-      </v-col>
-      <v-col cols="12" :sm="6" :md="3">
-        <v-text-field label="database" v-model="mysql.database" />
       </v-col>
       <v-col cols="12">
         <v-combobox
@@ -40,6 +43,7 @@
           :label="'nombre de la query'"
           v-model="newListData.key"
           type="text"
+          :required="true"
           :color="'primary'"
         ></v-text-field>
       </v-col>
@@ -69,6 +73,7 @@ export default {
         user: "",
         password: "",
         database: "",
+        port: ""
       },
       queryToExecute: "",
       select: "",
@@ -117,8 +122,12 @@ export default {
           dbConnection: this.mysql,
         })
         .then((res) => {
-          this.columnDef = Object.keys(res[0]).map((key) => ({ field: key }));
-          this.newListData.list = res;
+          if (res.length) {
+            this.columnDef = Object.keys(res[0]).map((key) => ({ field: key }));
+            this.newListData.list = res;
+          } else {
+            throw new Error('¡NO HAY DATOS!');
+          }
         })
         .then(() => this.SHOW_MESSAGE_BOX_SUCCESS("Query ejecutada"))
         .catch((err) => {

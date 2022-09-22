@@ -50,7 +50,8 @@
         </v-chip-group>
       </v-col>
       <v-col :cols="12">
-        <v-textarea label="Query Sql" v-model="querySql" :auto-grow="true" />
+        <v-textarea label="Query Sql" v-model="querySql" :auto-grow="true" :disabled="!selectedQuery"
+ />
       </v-col>
     </v-row>
     <v-row class="mx-3">
