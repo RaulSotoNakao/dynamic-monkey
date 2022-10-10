@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mr-10" color="secondary">
-    <v-card-title class="text-h6">
+  <c-container>
+    <template v-slot:header>
       <v-row>
         <v-col :cols="12" :md="6">Gestiona tus propias queries </v-col>
         <v-col :cols="12" :md="6">
@@ -32,8 +32,7 @@
           </v-text-field>
         </v-col>
       </v-row>
-    </v-card-title>
-
+    </template>
     <v-row class="mx-3">
       <v-col :xs="12">
         <v-chip-group active-class="primary--text" column>
@@ -50,8 +49,12 @@
         </v-chip-group>
       </v-col>
       <v-col :cols="12">
-        <v-textarea label="Query Sql" v-model="querySql" :auto-grow="true" :disabled="!selectedQuery"
- />
+        <v-textarea
+          label="Query Sql"
+          v-model="querySql"
+          :auto-grow="true"
+          :disabled="!selectedQuery"
+        />
       </v-col>
     </v-row>
     <v-row class="mx-3">
@@ -67,7 +70,7 @@
         </v-btn>
       </v-col>
     </v-row>
-  </v-card>
+  </c-container>
 </template>
 
 <script>

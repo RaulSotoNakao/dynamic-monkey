@@ -7,6 +7,7 @@ const endpointsMerge = {
   ...require("./controllers/mysqlController"),
   ...require("./service/actions"),
   ...require("./service/electronStoreService"),
+  ...require("./controllers/windowController"),
 };
 
 //ALL ENDPOINTS
@@ -26,9 +27,13 @@ const preloadEndpoints = (ipcRenderer) =>
 
 // TO USE IN background.js
 // ipcMain.handle("endpointName", function);
-const dynamicImportElectronaApi = (ipcMain) =>
-  endpointsName.map((endpoint) => {
-    ipcMain.handle(endpoint, endpointsMerge[endpoint]);
+const dynamicImportElectronaApi = (ipcMain, app, win) => {
+  return endpointsName.map((endpoint) => {
+    const handler = (event, payload) =>
+      endpointsMerge[endpoint](event, payload, app, win);
+
+    ipcMain.handle(endpoint, handler);
   });
+};
 
 module.exports = { preloadEndpoints, dynamicImportElectronaApi };

@@ -1,86 +1,77 @@
 <template>
-  <v-row v-show="selectedTemplate.name">
-    <v-col cols="12">
-      <v-card color="secondary">
-        <v-card-title class="text-h6">
-          <v-row>
-            <v-col :cols="12" :md="4">
-              {{ selectedTemplate.name  }}</v-col
-            >
-            <v-col class="d-flex justify-end mt-2" :md="8">
-              <v-btn
-                v-if="!render.active"
-                color="info"
-                class="mx-2"
-                @click="() => renderTemplate()"
-              >
-                renderizado
-                <v-icon right> mdi-eye </v-icon>
-              </v-btn>
-              <v-btn
-                v-if="render.active"
-                color="info"
-                class="mx-2"
-                @click="() => (render.active = false)"
-              >
-                mostrar template
-                <v-icon right> mdi-eye </v-icon>
-              </v-btn>
-
-              <v-btn color="primary" class="mx-2" @click="() => saveTemplate()">
-                Guardar template
-                <v-icon right> mdi-content-save </v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card-title>
-
-        <v-container>
-          <v-row v-show="!!selectedLabel">
-            <v-col cols="12">
-              <v-banner
-                color="secondary"
-                elevation="12"
-                icon="mdi-database"
-                rounded
-                single-line
-              >
-                {{
-                  selectedLabel +
-                  " -> " +
-                  JSON.stringify(parsedData)
-                }}
-              </v-banner>
-            </v-col>
-            <v-col cols="12">
-              <v-text-field
-                append-outer-icon="mdi-find-replace"
-                :label="`Buscar ${
-                  stringToReplace ? `'${stringToReplace}'` : 'texto'
-                } y remplazar por el dato ${selectedLabel}!`"
-                type="text"
-                @click:append-outer="findAndReplace()"
-                :color="'primary'"
-                v-model="stringToReplace"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-textarea
+  <c-container v-show="selectedTemplate.name">
+    <template v-slot:header>
+      <v-row>
+        <v-col :cols="12" :md="4"> {{ selectedTemplate.name }}</v-col>
+        <v-col class="d-flex justify-end" :md="8">
+          <v-btn
             v-if="!render.active"
-            counter
-            auto-grow
-            label="Template"
-            v-model="template"
-          ></v-textarea>
-          <v-textarea
-            v-else
-            counter
-            auto-grow
-            label="Template"
-            :value="render.template"
-          ></v-textarea>
+            class="mx-2"
+            @click="() => renderTemplate()"
+          >
+            <span class="blue--text"> renderizado </span>
 
-          <!-- <v-sheet
+            <v-icon right color="info"> mdi-eye </v-icon>
+          </v-btn>
+          <v-btn
+            v-if="render.active"
+            class="mx-2"
+            @click="() => (render.active = false)"
+          >
+            <span class="blue--text"> mostrar template </span>
+
+            <v-icon right color="info"> mdi-eye </v-icon>
+          </v-btn>
+
+          <v-btn class="mx-2" @click="() => saveTemplate()">
+            <span class="primary--text"> Guardar template </span>
+            <v-icon right color="primary"> mdi-content-save </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </template>
+    <v-container>
+      <v-row v-show="!!selectedLabel">
+        <v-col cols="12">
+          <v-banner
+            color="secondary"
+            elevation="12"
+            icon="mdi-database"
+            rounded
+            single-line
+          >
+            {{ selectedLabel + " -> " + JSON.stringify(parsedData) }}
+          </v-banner>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field
+            append-outer-icon="mdi-find-replace"
+            :label="`Buscar ${
+              stringToReplace ? `'${stringToReplace}'` : 'texto'
+            } y remplazar por el dato ${selectedLabel}!`"
+            type="text"
+            @click:append-outer="findAndReplace()"
+            :color="'primary'"
+            v-model="stringToReplace"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-textarea
+        v-if="!render.active"
+        counter
+        auto-grow
+        label="Template"
+        v-model="template"
+      ></v-textarea>
+      <v-textarea
+        v-else
+        counter
+        auto-grow
+        label="Template"
+        :value="render.template"
+      ></v-textarea>
+
+      <!-- <v-sheet
             id="my-code-editor"
             ref="code-editor"
             class="mx-2 px-2"
@@ -93,10 +84,8 @@
           >
             {{ this.template }}
           </v-sheet> -->
-        </v-container>
-      </v-card>
-    </v-col>
-  </v-row>
+    </v-container>
+  </c-container>
 </template>
 
 <script>
@@ -120,10 +109,10 @@ export default {
     },
     parsedData() {
       const keys = this.selectedData ? Object.values(this.selectedData) : [];
-      const label = Array.isArray(keys[0]) ? Object.keys(keys[0][0]) : keys[0]
+      const label = Array.isArray(keys[0]) ? Object.keys(keys[0][0]) : keys[0];
 
-      return label
-    }
+      return label;
+    },
   },
   methods: {
     ...mapActions(["UPDATE_SELECTED_GENERATOR"]),

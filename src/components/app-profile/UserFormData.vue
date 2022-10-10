@@ -1,6 +1,7 @@
 <template>
-  <v-card class="mr-10" color="secondary">
-    <v-card-title class="text-h6"> Datos del usuario </v-card-title>
+  <c-container>
+    <template v-slot:header> Datos del usuario </template>
+
     <v-row class="mx-3">
       <v-col cols="12" :xs="12" :sm="6" :md="6">
         <v-text-field
@@ -34,10 +35,7 @@
       <v-col class="d-flex justify-end">
         <v-btn
           color="primary"
-          :disabled="
-            !formData.urlDirectorioDeTrabajo ||
-            !formData.lastName
-          "
+          :disabled="!formData.urlDirectorioDeTrabajo || !formData.lastName"
           class="mx-2"
           @click="() => saveUserData()"
         >
@@ -46,7 +44,7 @@
         </v-btn>
       </v-col>
     </v-row>
-  </v-card>
+  </c-container>
 </template>
 
 <script>
@@ -70,7 +68,7 @@ export default {
       "mdi-emoticon-sad",
       "mdi-emoticon-tongue",
     ],
-    urlUpdated: 0
+    urlUpdated: 0,
   }),
   computed: {
     ...mapGetters(["userData"]),
@@ -96,7 +94,7 @@ export default {
     toggleMarker() {
       window.ipc.SELECT_DIRECTORY().then((payload) => {
         this.formData.urlDirectorioDeTrabajo = payload.selected_dir;
-        this.urlUpdated ++;
+        this.urlUpdated++;
       });
     },
     changeIcon() {

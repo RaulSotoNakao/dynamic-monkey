@@ -1,63 +1,46 @@
 <template>
-  <v-card
+  <v-container
     style="width: 100%; height: 100%"
     :disabled="isLoading"
     :loading="isLoading"
+    tile
   >
-    <v-card-title>
-      <v-row class="">
-        <v-col>
-          <v-icon large left> mdi-table-cog </v-icon>
-          <span class="text-h6 font-weight-light">Generador</span>
-        </v-col>
-        <v-col class="d-flex justify-end">
-          <v-btn
-            color="primary"
-            class="mx-2 text-sm-body-2"
-            @click="() => executeGenerator()"
-          >
-            Generar estructura
-            <v-icon right> mdi-eye </v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-card-title>
+    <v-row style="border-bottom: 2px solid #cfd8dc; border-radius: 15px">
+      <v-col>
+        <v-icon large left> mdi-table-cog </v-icon>
+        <span class="text-h6 font-weight-light">Generador</span>
+      </v-col>
+      <v-col class="d-flex justify-end">
+        <v-btn
+          color="primary"
+          class="mx-2 text-sm-body-2"
+          @click="() => executeGenerator()"
+        >
+          Generar estructura
+          <v-icon right> mdi-eye </v-icon>
+        </v-btn>
+      </v-col>
+    </v-row>
     <v-row>
-      <v-col
-        :sm="12"
-        md="4"
-        :class="`${
-          ['sm', 'xs'].includes($vuetify.breakpoint.name) ? 'px-10' : 'pl-10'
-        }`"
-      >
+      <v-col :sm="12" md="4">
         <v-row>
           <v-col :cols="12">
-            <v-card color="secondary">
-              <v-card-title class="text-h6">
-                
-                
-                Estructura de ficheros</v-card-title>
+            <c-container>
+              <template v-slot:header> Estructura de ficheros </template>
+
               <folder-structure />
-            </v-card>
+            </c-container>
           </v-col>
           <v-col :cols="12">
-            <v-card color="secondary">
-              <data-structure />
-            </v-card>
+            <data-structure />
           </v-col>
         </v-row>
       </v-col>
-      <v-col
-        :sm="12"
-        md="8"
-        :class="`${
-          ['sm', 'xs'].includes($vuetify.breakpoint.name) ? 'px-10' : 'pr-10'
-        }`"
-      >
+      <v-col :sm="12" md="8">
         <editor-generator></editor-generator>
       </v-col>
     </v-row>
-  </v-card>
+  </v-container>
 </template>
 
 <script>

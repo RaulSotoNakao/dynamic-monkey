@@ -16,9 +16,14 @@ const Store = require("electron-store");
 import path from "path";
 const store = new Store();
 
+let win;
 // MY API ;)
-dynamicImportElectronaApi(ipcMain);
-
+// ipcMain.handle("CLOSE_WINDOW", () => {
+//   app.exit();
+// });
+// ipcMain.handle("MINIMIZE_WINDOW", () => {
+//   win.isMinimized() ? win.restore() : win.minimize();
+// });
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -27,9 +32,13 @@ protocol.registerSchemesAsPrivileged([
 
 async function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1000,
     height: 700,
+    transparent: true,
+    frame: false,
+    autoHideMenuBar: true,
+    titleBarStyle: "hidden",
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -39,6 +48,8 @@ async function createWindow() {
       preload: path.resolve(__dirname, "preload.js"),
     },
   });
+
+  dynamicImportElectronaApi(ipcMain, app, win);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode

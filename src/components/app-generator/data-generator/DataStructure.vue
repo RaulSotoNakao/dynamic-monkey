@@ -1,15 +1,15 @@
 <template>
-  <v-list dense color="secondary">
-    <div class="ml-4 d-flex justify-space-between flex-wrap">
-      <div style="width: 11rem" class="text-h6" color="dark">
-        Datos disponibles
+  <c-container>
+    <template v-slot:header>
+      <div class="d-flex justify-space-between flex-wrap">
+        <div>Datos disponibles</div>
+        <div class="buttons-container">
+          <modal-json-form></modal-json-form>
+          <modal-generator></modal-generator>
+          <menu-add-data></menu-add-data>
+        </div>
       </div>
-      <div class="mr-2 buttons-container">
-        <modal-json-form></modal-json-form>
-        <modal-generator></modal-generator>
-        <menu-add-data></menu-add-data>
-      </div>
-    </div>
+    </template>
     <v-list-item-group v-model="selectedItem" color="primary">
       <v-list-item v-for="(item, i) in templateDefinitionList" :key="i">
         <v-list-item-icon>
@@ -26,7 +26,7 @@
         ></delete-button>
       </v-list-item>
     </v-list-item-group>
-  </v-list>
+  </c-container>
 </template>
 
 <script>

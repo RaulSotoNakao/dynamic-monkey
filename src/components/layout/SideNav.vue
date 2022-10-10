@@ -2,9 +2,6 @@
   <v-navigation-drawer
     v-model="isCollapsed"
     :mini-variant.sync="mini"
-    permanent
-    floating
-    app
     expand-on-hover
     color="blue-grey lighten-4"
   >

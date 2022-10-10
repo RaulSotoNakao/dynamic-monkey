@@ -1,8 +1,13 @@
 <template>
-  <v-card class="mr-10" color="secondary">
-    <v-card-title class="text-h6">
+  <c-container>
+    <template v-slot:header>
       <v-row>
-        <v-col>Generadores </v-col>
+        <v-col
+          >Generadores
+          <v-card-text class="subtitle-2 font-weight-bold">
+            Bienvenido, ¡Aquí puedes administrar y crear Generadores!
+          </v-card-text>
+        </v-col>
         <v-col>
           <v-text-field
             label="nombre"
@@ -49,16 +54,13 @@
           </v-text-field>
         </v-col>
       </v-row>
-    </v-card-title>
-    <v-card-text class="subtitle-2 font-weight-bold">
-      Bienvenido, ¡Aquí puedes administrar y crear Generadores!
-    </v-card-text>
+    </template>
 
     <v-row class="d-flex justify-center align-center">
       <v-col class="mx-4">
         <v-card>
           <v-data-table
-            class="secondary"
+            outlined
             :headers="generatorHeaders"
             :items="generatorList"
           >
@@ -88,7 +90,7 @@
         </v-card>
       </v-col>
     </v-row>
-  </v-card>
+  </c-container>
 </template>
 
 <script>
