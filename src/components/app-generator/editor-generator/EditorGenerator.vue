@@ -33,13 +33,7 @@
     <v-container>
       <v-row v-show="!!selectedLabel">
         <v-col cols="12">
-          <v-banner
-            color="secondary"
-            elevation="12"
-            icon="mdi-database"
-            rounded
-            single-line
-          >
+          <v-banner color="secondary" icon="mdi-database" rounded single-line>
             {{ selectedLabel + " -> " + JSON.stringify(parsedData) }}
           </v-banner>
         </v-col>

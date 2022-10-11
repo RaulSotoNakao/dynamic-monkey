@@ -1,13 +1,14 @@
 <template>
   <v-container
+    class="pt-6"
     style="width: 100%; height: 100%"
     :disabled="isLoading"
     :loading="isLoading"
     tile
   >
-    <v-row style="border-bottom: 2px solid #cfd8dc; border-radius: 15px">
+    <v-row class="header-app">
       <v-col>
-        <v-icon large left> mdi-table-cog </v-icon>
+        <v-icon large left color="primary"> mdi-table-cog </v-icon>
         <span class="text-h6 font-weight-light">Generador</span>
       </v-col>
       <v-col class="d-flex justify-end">

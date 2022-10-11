@@ -3,7 +3,9 @@
     <div class="header">
       <slot name="header"></slot>
     </div>
-    <slot></slot>
+    <div class="my-2 container-body">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -16,21 +18,29 @@ export default {};
   width: 100%;
   height: 100%;
   border: 1px solid #cfd8dc;
-  border-radius: 2px;
-  transition: border-bottom 0.2s linear;
-  box-shadow: #26a69a;
-  border-top: 0px;
+  border-radius: 11px;
+  transition: transform 0.2s linear;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 5px 10px,
+    rgba(10, 37, 64, 0.35) 0px -2px 5px inset;
 }
 .my-container:hover {
-  box-shadow: 0px 0px 2px #26a69a;
+  transform: translateY(-5px);
+  box-shadow: #26a69a 0px 5px 10px, rgba(10, 37, 64, 0.35) 0px -2px 5px inset;
+
+  /* box-shadow: inset 0px 10px 20px 2px #26a69a; */
 }
 
 .header {
-  padding: 20px;
+  padding: 10px;
   text-align: left;
   color: #26a69a;
   font-size: 20px;
-  border-top: 2px solid #26a69a;
-  border-bottom: 1px solid #cfd8dc;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom: 2px solid #cfd8dc;
+  border-top: 6px solid #cfd8dc;
+}
+
+.container-body {
 }
 </style>

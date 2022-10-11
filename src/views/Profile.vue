@@ -1,9 +1,12 @@
 <template>
-  <v-container class="pt-7" style="width: 100%; height: 100%">
-    <v-row style="border-bottom: 2px solid #cfd8dc; border-radius: 15px">
-      <v-icon large left> mdi-home-account </v-icon>
-      <span class="text-h6 font-weight-light">Area Personal</span>
+  <v-container class="pt-6" style="width: 100%; height: 100%">
+    <v-row class="header-app">
+      <v-col>
+        <v-icon large left color="primary"> mdi-home-account </v-icon>
+        <span class="text-h6 font-weight-light">Area Personal</span>
+      </v-col>
     </v-row>
+
     <v-row>
       <v-timeline dense>
         <v-timeline-item color="primary" fill-dot>
@@ -59,4 +62,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.header-app {
+  border-radius: 10px;
+  text-align: left;
+  color: #26a69a;
+  font-size: 20px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 5px,
+    rgba(10, 37, 64, 0.35) 0px -1px 3px inset;
+}
+</style>
