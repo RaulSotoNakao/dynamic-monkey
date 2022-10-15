@@ -6,26 +6,26 @@
         <v-col class="d-flex justify-end" :md="8">
           <v-btn
             v-if="!render.active"
-            class="mx-2"
+            class="mx-2 primary"
             @click="() => renderTemplate()"
           >
-            <span class="blue--text"> renderizado </span>
+            <span class="background--text"> renderizado </span>
 
-            <v-icon right color="info"> mdi-eye </v-icon>
+            <v-icon right color="background"> mdi-eye </v-icon>
           </v-btn>
           <v-btn
             v-if="render.active"
-            class="mx-2"
+            class="mx-2 primary"
             @click="() => (render.active = false)"
           >
-            <span class="blue--text"> mostrar template </span>
+            <span class="background--text"> mostrar template </span>
 
-            <v-icon right color="info"> mdi-eye </v-icon>
+            <v-icon right color="background"> mdi-eye </v-icon>
           </v-btn>
 
-          <v-btn class="mx-2" @click="() => saveTemplate()">
-            <span class="primary--text"> Guardar template </span>
-            <v-icon right color="primary"> mdi-content-save </v-icon>
+          <v-btn class="mx-2 primary" @click="() => saveTemplate()">
+            <span class="background--text"> Guardar template </span>
+            <v-icon right color="background"> mdi-content-save </v-icon>
           </v-btn>
         </v-col>
       </v-row>
@@ -33,8 +33,12 @@
     <v-container>
       <v-row v-show="!!selectedLabel">
         <v-col cols="12">
-          <v-banner color="secondary" icon="mdi-database" rounded single-line>
-            {{ selectedLabel + " -> " + JSON.stringify(parsedData) }}
+          <v-banner color="primary" rounded single-line>
+            <v-icon right color="background"> mdi-database </v-icon>
+
+            <span class="background--text">
+              {{ selectedLabel + " -> " + JSON.stringify(parsedData) }}
+            </span>
           </v-banner>
         </v-col>
         <v-col cols="12">

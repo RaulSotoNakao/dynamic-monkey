@@ -25,15 +25,15 @@ export default {
   width: 20px;
   height: 20px;
   border-radius: 20px;
-  background-color: #26a69a;
+  background-color: var(--v-primary-base);
 }
 
 .btn:hover {
-  background-color: white;
+  background-color: var(--v-secondary-base);
 }
 
 .btn:hover i {
-  color: #26a69a !important;
+  color: var(--v-primary-base) !important;
 }
 
 .icon {

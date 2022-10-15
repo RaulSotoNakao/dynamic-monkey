@@ -60,6 +60,7 @@
       <v-col class="mx-4">
         <v-card>
           <v-data-table
+            class="background"
             outlined
             :headers="generatorHeaders"
             :items="generatorList"

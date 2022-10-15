@@ -9,16 +9,13 @@
     <v-row class="header-app">
       <v-col>
         <v-icon large left color="primary"> mdi-table-cog </v-icon>
-        <span class="text-h6 font-weight-light">Generador</span>
+        <span>Generador</span>
       </v-col>
       <v-col class="d-flex justify-end">
-        <v-btn
-          color="primary"
-          class="mx-2 text-sm-body-2"
-          @click="() => executeGenerator()"
-        >
-          Generar estructura
-          <v-icon right> mdi-eye </v-icon>
+        <v-btn color="primary" class="mx-2" @click="() => executeGenerator()">
+          <span class="background--text"> Generar estructura </span>
+
+          <v-icon right color="background"> mdi-eye </v-icon>
         </v-btn>
       </v-col>
     </v-row>

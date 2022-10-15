@@ -25,6 +25,10 @@ export default {
 </script>
 
 <style>
+.v-application {
+  background-color: var(--v-background-base) !important;
+}
+
 html {
   overflow-y: hidden !important;
   border-radius: 20px;
@@ -42,12 +46,12 @@ html {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #26a69a;
+  background: var(--v-primary-base);
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #26a69a;
+  background: var(--v-primary-base);
 }
 </style>

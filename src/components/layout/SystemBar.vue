@@ -1,22 +1,22 @@
 <template>
-  <v-system-bar fixed color="secondary" style="display: flex" height="25px">
-    <v-btn class="px-0 mx-0" to="/">
+  <v-system-bar fixed color="primary" style="display: flex" height="25px">
+    <v-btn class="px-0 mx-0 background" to="/">
       <v-icon color="primary">mdi-dog</v-icon>
     </v-btn>
 
     <div class="draggable">
-      <p class="pl-2 text--grey">Bienvenido {{ userName }}!</p>
+      <p class="pl-2 background--text">Bienvenido {{ userName }}!</p>
     </div>
 
     <v-spacer></v-spacer>
     <v-menu open-on-hover offset-y>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on">
+        <v-btn v-bind="attrs" v-on="on" class="background">
           <v-icon color="primary">mdi-table-cog</v-icon>
         </v-btn>
       </template>
 
-      <v-list>
+      <v-list class="background">
         <v-list-item
           v-for="item in generatorList"
           :key="item.name"
@@ -25,7 +25,7 @@
           color="primary"
         >
           <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon color="primary">{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
@@ -35,13 +35,18 @@
       </v-list>
     </v-menu>
 
-    <v-btn to="/profile">
+    <v-btn to="/profile" class="background">
       <v-icon color="primary">mdi-account</v-icon>
     </v-btn>
 
     <v-spacer></v-spacer>
 
     <div class="draggable"></div>
+    <button-system-bar
+      class="mx-1"
+      icon="mdi-brightness-4"
+      @click="handleDarkTheme"
+    />
 
     <button-system-bar
       class="mx-1"
@@ -95,6 +100,9 @@ export default {
   },
   methods: {
     ...mapActions(["UPDATE_USER_DATA", "UPDATE_GENERATORS_DATA"]),
+    handleDarkTheme() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    },
     handleWindowClose() {
       window.ipc.CLOSE_WINDOW().then((res) => console.log(res));
     },
