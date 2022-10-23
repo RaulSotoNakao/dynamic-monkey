@@ -1,5 +1,5 @@
 <template>
-  <v-row class="mx-2 my-2 secondary rounded-lg">
+  <v-row class="mx-2 my-2 background rounded-lg">
     <v-col :cols="12">
       <v-textarea label="JSON DATA" v-model="newJsonData" :auto-grow="true" />
     </v-col>

@@ -1,62 +1,68 @@
 <template>
   <v-card flat>
-    <v-row class="mx-2 my-2 secondary rounded-lg">
-      <v-col cols="12" :sm="6" :md="4">
-        <v-text-field label="host" v-model="mysql.host" />
-      </v-col>
-      <v-col cols="12" :sm="6" :md="4">
-        <v-text-field label="port" v-model="mysql.port" />
-      </v-col>
-      <v-col cols="12" :sm="6" :md="4">
-        <v-text-field label="database" v-model="mysql.database" />
-      </v-col>
-      <v-col cols="12" :sm="6" >
-        <v-text-field label="user" v-model="mysql.user" />
-      </v-col>
-      <v-col cols="12" :sm="6" >
-        <v-text-field label="password" v-model="mysql.password" />
-      </v-col>
-      <v-col cols="12">
-        <v-combobox
-          v-model="select"
-          :items="userData.queries"
-          label="Select a query saved"
-          clearable
-          :item-text="(e) => e.queryName"
-          @change="(list) => list && setQuery(list.querySql)"
-        ></v-combobox>
-      </v-col>
-    </v-row>
-    <v-row class="mx-2 my-2 secondary rounded-lg">
-      <v-col>
-        <v-textarea
-          label="Query"
-          append-outer-icon="mdi-plus-circle"
-          v-model="queryToExecute"
-          @click:append-outer="makeQuery()"
-        ></v-textarea>
-      </v-col>
-    </v-row>
-    <v-row class="mx-2 my-2 secondary rounded-lg">
-      <v-col cols="12">
-        <v-text-field
-          :label="'nombre de la query'"
-          v-model="newListData.key"
-          type="text"
-          :required="true"
-          :color="'primary'"
-        ></v-text-field>
-      </v-col>
+    <c-container class="mt-5" :activeHeader="false">
+      <v-row class="mx-2 my-2">
+        <v-col cols="12" :sm="6" :md="4">
+          <v-text-field label="host" v-model="mysql.host" />
+        </v-col>
+        <v-col cols="12" :sm="6" :md="4">
+          <v-text-field label="port" v-model="mysql.port" />
+        </v-col>
+        <v-col cols="12" :sm="6" :md="4">
+          <v-text-field label="database" v-model="mysql.database" />
+        </v-col>
+        <v-col cols="12" :sm="6">
+          <v-text-field label="user" v-model="mysql.user" />
+        </v-col>
+        <v-col cols="12" :sm="6">
+          <v-text-field label="password" v-model="mysql.password" />
+        </v-col>
+        <v-col cols="12">
+          <v-combobox
+            v-model="select"
+            :items="userData.queries"
+            label="Select a query saved"
+            clearable
+            :item-text="(e) => e.queryName"
+            @change="(list) => list && setQuery(list.querySql)"
+          ></v-combobox>
+        </v-col>
+      </v-row>
+    </c-container>
+    <c-container  class="mt-5" :activeHeader="false">
+      <v-row class="mx-2 my-2">
+        <v-col>
+          <v-textarea
+            label="Query"
+            append-outer-icon="mdi-plus-circle"
+            v-model="queryToExecute"
+            @click:append-outer="makeQuery()"
+          ></v-textarea>
+        </v-col>
+      </v-row>
+    </c-container>
+    <c-container  class="mt-5" :activeHeader="false">
+      <v-row class="mx-2 my-2">
+        <v-col cols="12">
+          <v-text-field
+            :label="'nombre de la query'"
+            v-model="newListData.key"
+            type="text"
+            :required="true"
+            :color="'primary'"
+          ></v-text-field>
+        </v-col>
 
-      <v-col>
-        <editable-table
-          :columnDefs="columnDef"
-          :rowData.sync="newListData.list"
-          @saveTable="saveData"
-          :saveDisabled="!newListData.key"
-        ></editable-table>
-      </v-col>
-    </v-row>
+        <v-col>
+          <editable-table
+            :columnDefs="columnDef"
+            :rowData.sync="newListData.list"
+            @saveTable="saveData"
+            :saveDisabled="!newListData.key"
+          ></editable-table>
+        </v-col>
+      </v-row>
+    </c-container>
   </v-card>
 </template>
 
@@ -73,7 +79,7 @@ export default {
         user: "",
         password: "",
         database: "",
-        port: ""
+        port: "",
       },
       queryToExecute: "",
       select: "",
@@ -126,7 +132,7 @@ export default {
             this.columnDef = Object.keys(res[0]).map((key) => ({ field: key }));
             this.newListData.list = res;
           } else {
-            throw new Error('¡NO HAY DATOS!');
+            throw new Error("¡NO HAY DATOS!");
           }
         })
         .then(() => this.SHOW_MESSAGE_BOX_SUCCESS("Query ejecutada"))

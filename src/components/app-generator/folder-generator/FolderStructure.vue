@@ -30,11 +30,11 @@
           </v-btn>
         </template>
 
-        <v-card>
+        <v-card class="background">
           <v-list-item-content>
             <v-row class="mx-2">
               <v-col cols="12">
-                <v-chip-group active-class="primary--text" column>
+                <v-chip-group active-class="secondary--text" column>
                   <v-chip
                     v-for="(icon, name) in files"
                     :key="name"

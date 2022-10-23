@@ -15,11 +15,11 @@
       absolute
       offset-x
     >
-      <v-card>
+      <v-card class="background">
         <v-card-actions>
           ¿Estas seguro?
-          <v-btn color="blue-grey lighten-4 ml-2" @click="() => deleteItem()"
-            >Si</v-btn
+          <v-btn color="primary  ml-2" @click="() => deleteItem()"
+            ><span class="background--text">Si</span></v-btn
           >
         </v-card-actions>
       </v-card>

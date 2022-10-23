@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-row class="mx-2 my-2 secondary rounded-lg">
+    <v-row class="mx-2 my-2 background rounded-lg">
       <v-col cols="12">
         <v-text-field
           :label="'nombre de la query'"

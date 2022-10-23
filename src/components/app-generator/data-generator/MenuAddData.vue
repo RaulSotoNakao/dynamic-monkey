@@ -11,28 +11,24 @@
       v-model="menu"
       :position-x="x"
       :position-y="y"
+      class="background-app"
       absolute
       offset-y
       :close-on-content-click="false"
     >
       <v-card>
-        <v-tabs
-          v-model="tab"
-          background-color="transparent"
-          color="primary"
-          grow
-        >
-          <v-tab>Lista</v-tab>
-          <v-tab>Objeto</v-tab>
+        <v-tabs v-model="tab" color="primary" grow>
+          <v-tab class="background-app" >Lista</v-tab>
+          <v-tab class="background-app" >Objeto</v-tab>
         </v-tabs>
 
-        <v-tabs-items v-model="tab">
+        <v-tabs-items v-model="tab" class="background-app">
           <v-tab-item>
-            <list-form />
+            <list-form class="background-app" />
           </v-tab-item>
 
           <v-tab-item>
-            <object-form />
+            <object-form class="background-app"  />
           </v-tab-item>
         </v-tabs-items>
       </v-card>

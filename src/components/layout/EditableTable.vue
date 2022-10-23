@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <v-card color="grey lighten-4" flat tile elevation="4">
-        <v-toolbar elevation="4" outlined rounded color="secondary">
+        <v-toolbar elevation="4" outlined rounded color="background">
           <default-button
             labelHover="Añadir fila"
             :colorButton="'primary'"
@@ -59,7 +59,7 @@
               width: 20rem;
               border: solid 1px;
               border-style: dashed;
-              border: 2px solid #26a69a;
+              border: 2px solid var(--v-secondary-base);
               border-radius: 5px;
             "
           >
@@ -240,16 +240,16 @@ export default {
 <style>
 .ag-theme-alpine {
   --ag-foreground-color: rgba(0, 0, 0, 0.6);
-  --ag-background-color: #cfd8dc;
+  --ag-background-color: var(--v-background-base);
   --ag-header-foreground-color: rgba(0, 0, 0, 0.6);
-  --ag-header-background-color: #cfd8dc;
+  --ag-header-background-color: var(--v-background-base);
   --ag-odd-row-background-color: rgb(0, 0, 0, 0.03);
   --ag-header-column-resize-handle-color: rgba(0, 0, 0, 0.6);
 
   --ag-font-size: 10px;
   --ag-font-family: Roboto, sans-serif;
-  --ag-header-cell-hover-background-color: #26a69a;
-  --ag-header-cell-moving-background-color: #cfd8dc;
+  --ag-header-cell-hover-background-color: var(--v-secondary-base);
+  --ag-header-cell-moving-background-color: var(--v-background-base);
 }
 .ag-theme-alpine .ag-header {
   font-family: Roboto, sans-serif;
@@ -262,7 +262,7 @@ export default {
   font-size: 10px;
 }
 .vl {
-  border-left: 2px solid #26a69a;
+  border-left: 2px solid var(--v-secondary-base);
   height: 100%;
   margin: 1px 1rem;
 }

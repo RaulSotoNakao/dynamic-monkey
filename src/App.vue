@@ -29,6 +29,10 @@ export default {
   background-color: var(--v-background-base) !important;
 }
 
+.background-app {
+  background-color: var(--v-background-base) !important;
+}
+
 html {
   overflow-y: hidden !important;
   border-radius: 20px;

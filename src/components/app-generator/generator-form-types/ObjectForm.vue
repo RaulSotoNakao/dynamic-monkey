@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <v-row class="mx-2 my-2 secondary rounded-lg">
+    <v-row class="mx-2 my-2 background rounded-lg">
       <v-col cols="6">
         <v-text-field
           :label="'Crear nuevo objeto'"

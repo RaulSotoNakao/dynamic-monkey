@@ -8,23 +8,22 @@
       size="x-small"
     />
     <v-dialog v-model="dialog" width="1000" v-if="dialog">
-      <v-card>
+      <v-card class="background-app">
         <v-card-title class="text-center justify-center py-6">
           <p class="font-weight-bold">¡A buscar nuevos datos!</p>
         </v-card-title>
 
         <v-tabs
           v-model="tab"
-          background-color="transparent"
           color="primary"
           grow
         >
-          <v-tab>MYSQL</v-tab>
+          <v-tab class="background-app">MYSQL</v-tab>
         </v-tabs>
 
-        <v-tabs-items v-model="tab">
+        <v-tabs-items v-model="tab" class="background-app">
           <v-tab-item>
-            <database-form-query />
+            <database-form-query class="background-app"/>
           </v-tab-item>
         </v-tabs-items>
       </v-card>
